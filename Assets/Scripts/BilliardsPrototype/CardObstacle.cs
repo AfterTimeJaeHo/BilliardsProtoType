@@ -31,7 +31,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 _collider = GetComponent<Collider2D>();
 
             if (_collider != null)
-                _collider.isTrigger = false;
+                _collider.isTrigger = true;
         }
 
         public void HandleHit()
@@ -49,6 +49,21 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 _collider.enabled = false;
 
             gameObject.SetActive(false);
+        }
+
+        public void ResetCard()
+        {
+            _isConsumed = false;
+            if (_spriteRenderer != null)
+                _spriteRenderer.enabled = true;
+
+            if (_collider != null)
+            {
+                _collider.enabled = true;
+                _collider.isTrigger = true;
+            }
+
+            gameObject.SetActive(true);
         }
     }
 }

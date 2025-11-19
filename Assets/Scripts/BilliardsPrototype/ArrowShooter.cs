@@ -25,6 +25,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
 
         [Header("Trajectory")]
         [SerializeField] private LayerMask _collisionMask = ~0;
+        [SerializeField] private LayerMask _trajectoryReflectionMask = ~0;
         [SerializeField] private float _previewTravelTime = 1.8f;
         [SerializeField] private int _maxBounceCount = 5;
         [SerializeField] private float _timeBetweenShots = 0.25f;
@@ -104,7 +105,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
 
         private void LaunchArrow(Vector2 direction, float launchSpeed)
         {
-                        _isCharging = false;
+            _isCharging = false;
             _shotCooldown = _timeBetweenShots;
             ToggleTrajectory(false);
 
@@ -120,46 +121,85 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             arrow.Initialize(direction, launchSpeed, _maxBounceCount, _collisionMask);
         }
 
-
-        private void UpdateTrajectoryPreview(Vector2 direction, float launchSpeed)
+private void UpdateTrajectoryPreview(Vector2 direction, float launchSpeed)
         {
-            if (_trajectoryLine == null)
+            if (_trajectoryLine == null || _firePoint == null)
                 return;
 
             _previewPoints.Clear();
-            float previewZ = _firePoint.position.z;
-            Vector2 rayOrigin = _firePoint.position;
-            _previewPoints.Add(new Vector3(rayOrigin.x, rayOrigin.y, previewZ) + LineOffset);
+            Vector3 start = _firePoint.position;
+            _previewPoints.Add(start + LineOffset);
 
-            Vector2 remainingDirection = direction.normalized;
-            float remainingDistance = launchSpeed * _previewTravelTime;
-            int bounceCount = _maxBounceCount;
-
-            for (int i = 0; i <= bounceCount; i++)
+            Vector2 position = _firePoint.position;
+            Vector2 normalizedDirection = direction.sqrMagnitude < Mathf.Epsilon ? (Vector2)_firePoint.right : direction.normalized;
+            float speed = Mathf.Max(launchSpeed, 0f);
+            if (speed <= 0.0001f)
             {
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, remainingDirection, remainingDistance, _collisionMask);
-                if (hit)
-                {
-                    Vector2 hitPoint = hit.point;
-                    _previewPoints.Add(new Vector3(hitPoint.x, hitPoint.y, previewZ) + LineOffset);
+                _trajectoryLine.positionCount = 1;
+                _trajectoryLine.SetPosition(0, start + LineOffset);
+                return;
+            }
 
-                    remainingDistance -= hit.distance;
-                    if (remainingDistance <= 0f)
-                        break;
+            Vector2 velocity = normalizedDirection * speed;
+            float remainingTime = Mathf.Max(0f, _previewTravelTime);
+            float simStep = Mathf.Max(Time.fixedDeltaTime, 0.02f);
+            int reflectionsRemaining = Mathf.Max(0, _maxBounceCount);
+            int iterationGuard = Mathf.CeilToInt(remainingTime / simStep) + reflectionsRemaining + 8;
 
-                    rayOrigin = hitPoint + hit.normal * 0.01f;
-                    remainingDirection = Vector2.Reflect(remainingDirection, hit.normal);
-                }
-                else
-                {
-                    Vector2 endPoint = rayOrigin + remainingDirection * remainingDistance;
-                    _previewPoints.Add(new Vector3(endPoint.x, endPoint.y, previewZ) + LineOffset);
+            while (remainingTime > Mathf.Epsilon && iterationGuard-- > 0)
+            {
+                float stepTime = Mathf.Min(simStep, remainingTime);
+                float stepDistance = velocity.magnitude * stepTime;
+                if (stepDistance <= 0.0001f)
                     break;
+
+                Vector2 directionThisStep = velocity.normalized;
+                RaycastHit2D hit = Physics2D.Raycast(position, directionThisStep, stepDistance, _collisionMask);
+                if (hit.collider == null || ShouldIgnorePreviewCollider(hit.collider))
+                {
+                    position += directionThisStep * stepDistance;
+                    _previewPoints.Add(new Vector3(position.x, position.y, start.z) + LineOffset);
+                    remainingTime -= stepTime;
+                    continue;
                 }
+
+                float timeToHit = hit.distance / Mathf.Max(velocity.magnitude, 0.0001f);
+                position = hit.point;
+                _previewPoints.Add(new Vector3(position.x, position.y, start.z) + LineOffset);
+                remainingTime -= timeToHit;
+
+                bool canReflect = reflectionsRemaining > 0 && ShouldReflect(hit.collider);
+                if (canReflect)
+                {
+                    reflectionsRemaining--;
+                    velocity = Vector2.Reflect(directionThisStep, hit.normal).normalized * velocity.magnitude;
+                    position += hit.normal * 0.01f;
+                    continue;
+                }
+
+                break;
             }
 
             _trajectoryLine.positionCount = _previewPoints.Count;
             _trajectoryLine.SetPositions(_previewPoints.ToArray());
+        }
+
+        private bool ShouldReflect(Collider2D collider)
+        {
+            if (collider == null)
+                return false;
+
+            if (collider.isTrigger)
+                return false;
+
+            if (collider.GetComponent<CardObstacle>() != null)
+                return false;
+
+            if (collider.GetComponent<CharacterHealth>() != null)
+                return false;
+
+            int layerMask = 1 << collider.gameObject.layer;
+            return (_trajectoryReflectionMask.value & layerMask) != 0;
         }
 
         private void ToggleTrajectory(bool isVisible)
@@ -171,5 +211,28 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             if (isVisible == false)
                 _trajectoryLine.positionCount = 0;
         }
-    }
+    
+
+private bool ShouldIgnorePreviewCollider(Collider2D collider)
+        {
+            if (collider == null)
+                return true;
+
+            if (collider.isTrigger)
+                return true;
+
+            if (collider.GetComponent<CardObstacle>() != null)
+                return true;
+
+            if (collider.GetComponent<CharacterHealth>() != null)
+                return true;
+
+            if (collider.CompareTag("Enemy"))
+                return true;
+
+            string objectName = collider.gameObject.name;
+            return objectName.IndexOf("enemy", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
 }
+}
+

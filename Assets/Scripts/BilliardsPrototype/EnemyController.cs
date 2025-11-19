@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Aftertime.SecretSome.BilliardsPrototype
 {
     public class EnemyController : MonoBehaviour
     {
+        public static event Action onPlayerTurnBegan = delegate { };
+
         [SerializeField] private CharacterHealth _enemyHealth;
         [SerializeField] private CharacterHealth _playerHealth;
         [SerializeField] private Transform _modelRoot;
@@ -28,6 +31,8 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             ArrowShooter.onArrowFired += HandlePlayerShot;
             if (_enemyHealth != null)
                 _enemyHealth.onDeath += StopAttack;
+
+            onPlayerTurnBegan();
         }
 
         private void OnDisable()
@@ -85,6 +90,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
 
             _playerHealth?.TakeDamage(_attackDamage);
             _attackRoutine = null;
+            onPlayerTurnBegan();
         }
 
         private void StopAttack()
@@ -97,6 +103,8 @@ namespace Aftertime.SecretSome.BilliardsPrototype
 
             if (_modelRoot != null)
                 _modelRoot.localPosition = _defaultLocalPos;
+
+            onPlayerTurnBegan();
         }
     }
 }

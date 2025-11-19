@@ -14,24 +14,33 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             if (scene.name.Equals(TargetSceneName) == false)
                 return;
 
-            CharacterHealth archer = EnsureCharacter("ArcherRoot", 40f, new Vector3(0f, -1.1f, 0f));
-            CharacterHealth enemy = EnsureCharacter("EnemyDummy", 25f, new Vector3(0f, -1.1f, 0f));
+            CharacterHealth archer = EnsureCharacter("ArcherRoot", 40f, new Vector3(0f, -1.1f, 0f), false);
+            CharacterHealth enemy = EnsureCharacter("EnemyDummy", 25f, new Vector3(0f, -1.1f, 0f), true);
 
             CardIconDisplay iconDisplay = EnsureComponent<CardIconDisplay>("ArcherRoot");
-            if (iconDisplay != null)
-                iconDisplay.ResetIcons();
+            iconDisplay?.ResetIcons();
 
             EnemyController enemyController = EnsureComponent<EnemyController>("EnemyDummy");
             if (enemyController != null)
-                enemyController.Configure(enemy, archer, enemy != null ? enemy.transform : null);
+            {
+                Transform modelRoot = GameObject.Find("EnemyDummy")?.transform;
+                enemyController.Configure(enemy, archer, modelRoot);
+            }
 
-            EnsureCardObstacle("CardObstacle_1");
-            EnsureCardObstacle("CardObstacle_2");
-            EnsureCardObstacle("CardObstacle_3");
-            EnsureCardObstacle("CardObstacle_4");
+            CardObstacle[] cards = new[]
+            {
+                EnsureCardObstacle("CardObstacle_1"),
+                EnsureCardObstacle("CardObstacle_2"),
+                EnsureCardObstacle("CardObstacle_3"),
+                EnsureCardObstacle("CardObstacle_4")
+            };
+
+            CardSpawnManager spawnManager = EnsureComponent<CardSpawnManager>("PlayfieldRoot");
+            if (spawnManager != null)
+                spawnManager.AssignPool(cards);
         }
 
-        private static CharacterHealth EnsureCharacter(string objectName, float maxHealth, Vector3 barOffset)
+        private static CharacterHealth EnsureCharacter(string objectName, float maxHealth, Vector3 barOffset, bool deactivateOnDeath)
         {
             GameObject target = GameObject.Find(objectName);
             if (target == null)
@@ -42,7 +51,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 health = target.AddComponent<CharacterHealth>();
 
             health.SetMaxHealth(maxHealth);
-            health.SetDeactivateOnDeath(true);
+            health.SetDeactivateOnDeath(deactivateOnDeath);
 
             HealthBarUI bar = target.GetComponentInChildren<HealthBarUI>();
             if (bar == null)
@@ -80,14 +89,17 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             return bar;
         }
 
-        private static void EnsureCardObstacle(string objectName)
+        private static CardObstacle EnsureCardObstacle(string objectName)
         {
             GameObject obj = GameObject.Find(objectName);
             if (obj == null)
-                return;
+                return null;
 
-            if (obj.GetComponent<CardObstacle>() == null)
-                obj.AddComponent<CardObstacle>();
+            CardObstacle obstacle = obj.GetComponent<CardObstacle>();
+            if (obstacle == null)
+                obstacle = obj.AddComponent<CardObstacle>();
+
+            return obstacle;
         }
 
         private static T EnsureComponent<T>(string objectName) where T : Component

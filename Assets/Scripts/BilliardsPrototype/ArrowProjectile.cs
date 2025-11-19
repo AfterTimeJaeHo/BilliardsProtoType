@@ -13,12 +13,15 @@ namespace Aftertime.SecretSome.BilliardsPrototype
         [SerializeField] private float _destroyDelayAfterStop = 0.8f;
         [SerializeField] private float _surfaceOffset = 0.05f;
         [SerializeField] private float _minimumBounceSpeed = 4f;
+        [SerializeField] private float _manualSimStep = 0.02f;
         [SerializeField] private float _damage = 5f;
 
         private int _remainingBounces;
-        private float _cachedSpeed;
+        private float _currentSpeed;
         private bool _isActive;
         private float _lifeTimer;
+        private Vector2 _travelDirection = Vector2.right;
+        private Vector2 _currentPosition;
 
         private void Reset()
         {
@@ -47,66 +50,99 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 return;
             }
 
-            if (_rigidbody.linearVelocity.sqrMagnitude > 0.001f)
-            {
-                Vector2 direction = _rigidbody.linearVelocity.normalized;
-                transform.right = direction;
-                _cachedSpeed = _rigidbody.linearVelocity.magnitude;
-            }
+            ManualSimulate(Time.deltaTime);
         }
 
         public void Initialize(Vector2 direction, float launchSpeed, int maxBounceCount, LayerMask bounceLayer)
         {
             _isActive = true;
             _lifeTimer = 0f;
-            _cachedSpeed = launchSpeed;
+            _currentSpeed = Mathf.Max(launchSpeed, _minimumBounceSpeed);
             _remainingBounces = Mathf.Max(0, maxBounceCount);
             _bounceMask = bounceLayer;
 
-            Vector2 normalizedDirection = direction.sqrMagnitude < Mathf.Epsilon ? Vector2.right : direction.normalized;
-            _rigidbody.bodyType = RigidbodyType2D.Dynamic;
-            _rigidbody.linearVelocity = normalizedDirection * launchSpeed;
-            transform.right = normalizedDirection;
-            _collider.enabled = true;
+            _travelDirection = direction.sqrMagnitude < Mathf.Epsilon ? Vector2.right : direction.normalized;
+            _currentPosition = _rigidbody != null ? _rigidbody.position : (Vector2)transform.position;
+
+            if (_rigidbody != null)
+            {
+                _rigidbody.simulated = false;
+                _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+                _rigidbody.linearVelocity = Vector2.zero;
+            }
+
+            if (_collider != null)
+                _collider.enabled = false;
+
+            transform.position = new Vector3(_currentPosition.x, _currentPosition.y, transform.position.z);
+            transform.right = _travelDirection;
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void ManualSimulate(float deltaTime)
         {
-            if (_isActive == false)
-                return;
+            float remainingTime = deltaTime;
 
-            CharacterHealth targetHealth = collision.collider.GetComponent<CharacterHealth>();
-            if (targetHealth != null)
+            while (remainingTime > Mathf.Epsilon && _isActive)
             {
-                targetHealth.TakeDamage(_damage);
+                float stepTime = Mathf.Min(_manualSimStep, remainingTime);
+                float stepDistance = _currentSpeed * stepTime;
+                if (stepDistance <= 0.0001f)
+                    break;
+
+                RaycastHit2D hit = Physics2D.Raycast(_currentPosition, _travelDirection, stepDistance, _bounceMask);
+                if (hit.collider == null)
+                {
+                    _currentPosition += _travelDirection * stepDistance;
+                    remainingTime -= stepTime;
+                    continue;
+                }
+
+                Collider2D hitCollider = hit.collider;
+                float travelledTime = stepTime * (hit.distance / Mathf.Max(stepDistance, 0.0001f));
+                remainingTime -= Mathf.Max(travelledTime, 0f);
+                _currentPosition = hit.point;
+
+                if (TryDamageTarget(hitCollider))
+                {
+                    FinishProjectile();
+                    break;
+                }
+
+                if (hitCollider.TryGetComponent(out CardObstacle card))
+                    card.HandleHit();
+
+                if (hitCollider.isTrigger)
+                {
+                    _currentPosition += _travelDirection * Mathf.Max(_surfaceOffset, 0.001f);
+                    continue;
+                }
+
+                bool canBounce = _remainingBounces > 0 && ((_bounceMask.value & (1 << hitCollider.gameObject.layer)) != 0);
+                if (canBounce)
+                {
+                    _remainingBounces--;
+                    _travelDirection = Vector2.Reflect(_travelDirection, hit.normal).normalized;
+                    _currentPosition = hit.point + hit.normal * _surfaceOffset;
+                    continue;
+                }
+
                 FinishProjectile();
-                return;
+                break;
             }
 
-            if (collision.collider.TryGetComponent<CardObstacle>(out CardObstacle cardObstacle))
-                cardObstacle.HandleHit();
+            transform.position = new Vector3(_currentPosition.x, _currentPosition.y, transform.position.z);
+            transform.right = _travelDirection;
+        }
 
-            int otherLayer = collision.gameObject.layer;
-            bool canBounce = (_bounceMask.value & (1 << otherLayer)) != 0;
-
-            if (canBounce == false || _remainingBounces <= 0)
+        private bool TryDamageTarget(Collider2D target)
+        {
+            if (target != null && target.TryGetComponent(out CharacterHealth health))
             {
-                FinishProjectile();
-                return;
+                health.TakeDamage(_damage);
+                return true;
             }
 
-            Vector2 incoming = _rigidbody.linearVelocity.sqrMagnitude <= Mathf.Epsilon
-                ? (collision.relativeVelocity.sqrMagnitude < Mathf.Epsilon ? Vector2.right : collision.relativeVelocity.normalized)
-                : _rigidbody.linearVelocity.normalized;
-            Vector2 normal = collision.GetContact(0).normal;
-            Vector2 reflected = Vector2.Reflect(incoming, normal).normalized;
-
-            ContactPoint2D contact = collision.GetContact(0);
-            Vector2 contactPoint = contact.point;
-            _rigidbody.position = contactPoint + normal * _surfaceOffset;
-            _rigidbody.linearVelocity = reflected * Mathf.Max(_cachedSpeed, _minimumBounceSpeed);
-            transform.right = reflected;
-            _remainingBounces--;
+            return false;
         }
 
         private void FinishProjectile()
@@ -115,8 +151,13 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 return;
 
             _isActive = false;
-            _rigidbody.linearVelocity = Vector2.zero;
-            _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+            if (_rigidbody != null)
+            {
+                _rigidbody.linearVelocity = Vector2.zero;
+                _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+                _rigidbody.simulated = false;
+            }
+
             if (_collider != null)
                 _collider.enabled = false;
 

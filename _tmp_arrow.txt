@@ -1,0 +1,325 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Aftertime.SecretSome.BilliardsPrototype
+{
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Collider2D))]
+    public class ArrowProjectile : MonoBehaviour
+    {
+        public static event Action<ArrowProjectile> onProjectileFinished = delegate { };
+
+        [SerializeField] private Rigidbody2D _rigidbody;
+        [SerializeField] private Collider2D _collider;
+        [SerializeField] private LayerMask _bounceMask = ~0;
+        [SerializeField] private float _maxLifetime = 8f;
+        [SerializeField] private float _destroyDelayAfterStop = 0.8f;
+        [SerializeField] private float _surfaceOffset = 0.05f;
+        [SerializeField] private float _minimumBounceSpeed = 4f;
+        [SerializeField] private bool _usePhysicsSimulation = false;
+        [SerializeField] private float _manualSimStep = 0.02f;
+        [SerializeField] private float _damage = 5f;
+
+        private int _remainingBounces;
+        private float _cachedSpeed;
+        private bool _isActive;
+        private bool _notifiedFinish;
+        private float _lifeTimer;
+        private readonly HashSet<Collider2D> _ignoredColliders = new HashSet<Collider2D>();
+        private Vector2 _cachedDirection = Vector2.right;
+        private Vector2 _simulatedPosition;
+
+        private void Reset()
+        {
+            _rigidbody = GetComponent<Rigidbody2D>();
+            _collider = GetComponent<Collider2D>();
+        }
+
+        private void Awake()
+        {
+            if (_rigidbody == null)
+                _rigidbody = GetComponent<Rigidbody2D>();
+
+            if (_collider == null)
+                _collider = GetComponent<Collider2D>();
+        }
+
+        private void Update()
+        {
+            if (_isActive == false)
+                return;
+
+            _lifeTimer += Time.deltaTime;
+            if (_lifeTimer >= _maxLifetime)
+            {
+                FinishProjectile();
+                return;
+            }
+
+            if (_usePhysicsSimulation)
+            {
+                if (_rigidbody.linearVelocity.sqrMagnitude > 0.001f)
+                {
+                    Vector2 direction = _rigidbody.linearVelocity.normalized;
+                    transform.right = direction;
+                    _cachedDirection = direction;
+                    _cachedSpeed = _rigidbody.linearVelocity.magnitude;
+                }
+
+                return;
+            }
+
+            ManualSimulate(Time.deltaTime);
+        }
+
+        public void Initialize(Vector2 direction, float launchSpeed, int maxBounceCount, LayerMask bounceLayer)
+        {
+            _isActive = true;
+            _notifiedFinish = false;
+            _lifeTimer = 0f;
+            _cachedSpeed = launchSpeed;
+            _remainingBounces = Mathf.Max(0, maxBounceCount);
+            _bounceMask = bounceLayer;
+            RestoreIgnoredCollisions();
+
+            Vector2 normalizedDirection = direction.sqrMagnitude < Mathf.Epsilon ? Vector2.right : direction.normalized;
+            _cachedDirection = normalizedDirection;
+            _simulatedPosition = _rigidbody != null ? _rigidbody.position : (Vector2)transform.position;
+
+            if (_usePhysicsSimulation)
+            {
+                _rigidbody.simulated = true;
+                _rigidbody.bodyType = RigidbodyType2D.Dynamic;
+                _rigidbody.linearVelocity = normalizedDirection * launchSpeed;
+                transform.right = normalizedDirection;
+                if (_collider != null)
+                    _collider.enabled = true;
+            }
+            else
+            {
+                if (_rigidbody != null)
+                {
+                    _rigidbody.simulated = false;
+                    _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+                    _rigidbody.linearVelocity = Vector2.zero;
+                }
+
+                if (_collider != null)
+                    _collider.enabled = false;
+
+                transform.position = new Vector3(_simulatedPosition.x, _simulatedPosition.y, transform.position.z);
+                transform.right = normalizedDirection;
+            }
+        }
+
+        private void ManualSimulate(float deltaTime)
+        {
+            float speed = Mathf.Max(_cachedSpeed, _minimumBounceSpeed);
+            if (speed <= 0.0001f)
+            {
+                FinishProjectile();
+                return;
+            }
+
+            float remainingTime = deltaTime;
+            Vector2 currentDirection = _cachedDirection.sqrMagnitude < Mathf.Epsilon ? GetStableTravelDirection() : _cachedDirection.normalized;
+
+            while (remainingTime > 0f && _isActive)
+            {
+                float stepTime = Mathf.Min(_manualSimStep, remainingTime);
+                float stepDistance = speed * stepTime;
+                if (stepDistance <= 0.0001f)
+                    break;
+
+                RaycastHit2D hit = Physics2D.Raycast(_simulatedPosition, currentDirection, stepDistance, _bounceMask);
+                if (hit.collider == null)
+                {
+                    _simulatedPosition += currentDirection * stepDistance;
+                    remainingTime -= stepTime;
+                    continue;
+                }
+
+                CharacterHealth targetHealth = hit.collider.GetComponent<CharacterHealth>();
+                if (targetHealth != null)
+                {
+                    targetHealth.TakeDamage(_damage);
+                    _simulatedPosition = hit.point + currentDirection * Mathf.Max(_surfaceOffset, 0.001f);
+                    remainingTime -= stepTime * (hit.distance / Mathf.Max(stepDistance, 0.0001f));
+                    continue;
+                }
+
+                CardObstacle card = hit.collider.GetComponent<CardObstacle>();
+                if (card != null)
+                {
+                    card.HandleHit();
+                    _simulatedPosition = hit.point;
+                    FinishProjectile();
+                    break;
+                }
+
+                if (hit.collider.isTrigger)
+                {
+                    _simulatedPosition += currentDirection * stepDistance;
+                    remainingTime -= stepTime;
+                    continue;
+                }
+
+                bool canBounce = _remainingBounces > 0;
+                if (canBounce)
+                {
+                    _remainingBounces--;
+                    currentDirection = Vector2.Reflect(currentDirection, hit.normal).normalized;
+                    _cachedDirection = currentDirection;
+                    _simulatedPosition = hit.point + hit.normal * _surfaceOffset;
+                    remainingTime -= stepTime * (hit.distance / Mathf.Max(stepDistance, 0.0001f));
+                    continue;
+                }
+
+                _simulatedPosition = hit.point;
+                FinishProjectile();
+                break;
+            }
+
+            _cachedSpeed = speed;
+            transform.position = new Vector3(_simulatedPosition.x, _simulatedPosition.y, transform.position.z);
+            transform.right = currentDirection;
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (_isActive == false || _usePhysicsSimulation == false)
+                return;
+
+            Collider2D otherCollider = collision.collider;
+            if (otherCollider == null)
+                return;
+
+            CharacterHealth targetHealth = otherCollider.GetComponent<CharacterHealth>();
+            if (targetHealth != null)
+            {
+                targetHealth.TakeDamage(_damage);
+                PassThroughTarget(otherCollider, collision);
+                return;
+            }
+
+            int otherLayer = otherCollider.gameObject.layer;
+            bool canBounce = (_bounceMask.value & (1 << otherLayer)) != 0 && otherCollider.isTrigger == false;
+
+            if (canBounce == false || _remainingBounces <= 0)
+            {
+                FinishProjectile();
+                return;
+            }
+
+            Vector2 incoming = _rigidbody.linearVelocity.sqrMagnitude <= Mathf.Epsilon
+                ? (collision.relativeVelocity.sqrMagnitude < Mathf.Epsilon ? GetStableTravelDirection() : collision.relativeVelocity.normalized)
+                : _rigidbody.linearVelocity.normalized;
+            Vector2 normal = GetContactNormal(collision);
+            Vector2 reflected = Vector2.Reflect(incoming, normal).normalized;
+
+            Vector2 contactPoint = GetContactPoint(collision);
+            _rigidbody.position = contactPoint + normal * _surfaceOffset;
+            _rigidbody.linearVelocity = reflected * Mathf.Max(_cachedSpeed, _minimumBounceSpeed);
+            transform.right = reflected;
+            _cachedDirection = reflected;
+            _remainingBounces--;
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (_isActive == false)
+                return;
+
+            if (other.TryGetComponent(out CardObstacle card))
+                card.HandleHit();
+        }
+
+        private void PassThroughTarget(Collider2D otherCollider, Collision2D collision)
+        {
+            if (_collider == null || otherCollider == null || _rigidbody == null)
+                return;
+
+            Vector2 travelDirection = GetStableTravelDirection();
+            Vector2 contactPoint = GetContactPoint(collision);
+            Vector2 offset = travelDirection * Mathf.Max(_surfaceOffset, 0.001f);
+
+            _rigidbody.position = contactPoint + offset;
+            _rigidbody.linearVelocity = travelDirection * Mathf.Max(_cachedSpeed, _minimumBounceSpeed);
+            transform.right = travelDirection;
+            _cachedDirection = travelDirection;
+
+            if (_ignoredColliders.Add(otherCollider))
+                Physics2D.IgnoreCollision(_collider, otherCollider, true);
+        }
+
+        private Vector2 GetStableTravelDirection()
+        {
+            if (_cachedDirection.sqrMagnitude > 0.0001f)
+                return _cachedDirection;
+
+            if (_rigidbody != null && _rigidbody.linearVelocity.sqrMagnitude > 0.0001f)
+                return _rigidbody.linearVelocity.normalized;
+
+            Vector3 right = transform.right;
+            Vector2 planar = new Vector2(right.x, right.y);
+            return planar.sqrMagnitude > 0.0001f ? planar.normalized : Vector2.right;
+        }
+
+        private Vector2 GetContactPoint(Collision2D collision)
+        {
+            if (collision.contactCount > 0)
+                return collision.GetContact(0).point;
+
+            return _rigidbody != null ? _rigidbody.position : (Vector2)transform.position;
+        }
+
+        private Vector2 GetContactNormal(Collision2D collision)
+        {
+            if (collision.contactCount > 0)
+                return collision.GetContact(0).normal;
+
+            Vector2 fallback = GetStableTravelDirection();
+            return fallback.sqrMagnitude > 0.0001f ? -fallback : Vector2.up;
+        }
+
+        private void RestoreIgnoredCollisions()
+        {
+            if (_collider == null || _ignoredColliders.Count == 0)
+                return;
+
+            foreach (Collider2D ignored in _ignoredColliders)
+            {
+                if (ignored != null)
+                    Physics2D.IgnoreCollision(_collider, ignored, false);
+            }
+
+            _ignoredColliders.Clear();
+        }
+
+        private void FinishProjectile()
+        {
+            if (_isActive == false)
+                return;
+
+            _isActive = false;
+            if (_rigidbody != null)
+            {
+                _rigidbody.linearVelocity = Vector2.zero;
+                _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+                _rigidbody.simulated = _usePhysicsSimulation;
+            }
+            RestoreIgnoredCollisions();
+            if (_collider != null)
+                _collider.enabled = false;
+
+            if (_notifiedFinish == false)
+            {
+                _notifiedFinish = true;
+                onProjectileFinished(this);
+            }
+
+            Destroy(gameObject, _destroyDelayAfterStop);
+        }
+    }
+}
