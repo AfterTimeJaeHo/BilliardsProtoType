@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
     public class ArrowShooter : MonoBehaviour
     {
         public static event Action onArrowFired = delegate { };
+        public static event Action onVolleySequenceCompleted = delegate { };
         private static readonly Vector3 LineOffset = new Vector3(0f, 0f, -0.1f);
 
         [Header("References")]
@@ -30,11 +32,19 @@ namespace Aftertime.SecretSome.BilliardsPrototype
         [SerializeField] private int _maxBounceCount = 5;
         [SerializeField] private float _timeBetweenShots = 0.25f;
 
+        [Header("Auto Volley")]
+        [SerializeField] private Transform _autoTarget;
+        [SerializeField] private float _autoVolleyDelay = 0.08f;
+        [SerializeField] private float _autoVolleySpeed = 28f;
+        [SerializeField] private int _autoVolleyBounceCount;
+
         private readonly List<Vector3> _previewPoints = new List<Vector3>(8);
 
         private bool _isCharging;
         private float _currentChargeTime;
         private float _shotCooldown;
+        private bool _isVolleyPending;
+        private Coroutine _autoVolleyRoutine;
 
         private void Awake()
         {
@@ -54,6 +64,18 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 _arrowPrefab = Resources.Load<ArrowProjectile>(_arrowPrefabResource);
 
             ToggleTrajectory(false);
+        }
+
+        private void OnEnable()
+        {
+            ArrowProjectile.onArrowExpired += HandleArrowExpired;
+            ResolveAutoTarget();
+        }
+
+        private void OnDisable()
+        {
+            ArrowProjectile.onArrowExpired -= HandleArrowExpired;
+            StopAutoVolleyRoutine();
         }
 
         private void Update()
@@ -110,18 +132,22 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             ToggleTrajectory(false);
 
             onArrowFired();
+            SpawnArrow(direction, launchSpeed, _maxBounceCount, ArrowProjectile.ArrowOrigin.Primary);
+        }
 
+        private void SpawnArrow(Vector2 direction, float launchSpeed, int bounceCount, ArrowProjectile.ArrowOrigin origin)
+        {
             if (_arrowPrefab == null)
             {
-                Debug.LogWarning("ArrowShooter에 ArrowProjectile 프리팹이 지정되지 않았습니다.");
+                Debug.LogWarning("ArrowShooter??ArrowProjectile ?????? ????? ????????");
                 return;
             }
 
             ArrowProjectile arrow = Instantiate(_arrowPrefab, _firePoint.position, Quaternion.identity);
-            arrow.Initialize(direction, launchSpeed, _maxBounceCount, _collisionMask);
+            arrow.Initialize(direction, launchSpeed, bounceCount, _collisionMask, origin);
         }
 
-private void UpdateTrajectoryPreview(Vector2 direction, float launchSpeed)
+        private void UpdateTrajectoryPreview(Vector2 direction, float launchSpeed)
         {
             if (_trajectoryLine == null || _firePoint == null)
                 return;
@@ -211,9 +237,8 @@ private void UpdateTrajectoryPreview(Vector2 direction, float launchSpeed)
             if (isVisible == false)
                 _trajectoryLine.positionCount = 0;
         }
-    
 
-private bool ShouldIgnorePreviewCollider(Collider2D collider)
+        private bool ShouldIgnorePreviewCollider(Collider2D collider)
         {
             if (collider == null)
                 return true;
@@ -233,6 +258,107 @@ private bool ShouldIgnorePreviewCollider(Collider2D collider)
             string objectName = collider.gameObject.name;
             return objectName.IndexOf("enemy", StringComparison.OrdinalIgnoreCase) >= 0;
         }
-}
-}
 
+        private void HandleArrowExpired(ArrowProjectile.ArrowLifecycleResult result)
+        {
+            if (result.Origin != ArrowProjectile.ArrowOrigin.Primary)
+                return;
+
+            StopAutoVolleyRoutine(false);
+            _isVolleyPending = true;
+
+            if (result.CardHitCount > 0)
+            {
+                _autoVolleyRoutine = StartCoroutine(AutoVolleyRoutine(result.CardHitCount));
+                return;
+            }
+
+            CompleteVolleySequence();
+        }
+
+        private IEnumerator AutoVolleyRoutine(int arrowCount)
+        {
+            int shotsToFire = Mathf.Max(0, arrowCount);
+            if (shotsToFire == 0)
+            {
+                _autoVolleyRoutine = null;
+                CompleteVolleySequence();
+                yield break;
+            }
+
+            for (int i = 0; i < shotsToFire; i++)
+            {
+                Vector2 direction = GetAutoVolleyDirection();
+                SpawnArrow(direction, _autoVolleySpeed, _autoVolleyBounceCount, ArrowProjectile.ArrowOrigin.Bonus);
+
+                bool shouldDelay = _autoVolleyDelay > 0f && i < shotsToFire - 1;
+                if (shouldDelay)
+                    yield return new WaitForSeconds(_autoVolleyDelay);
+            }
+
+            _autoVolleyRoutine = null;
+            CompleteVolleySequence();
+        }
+
+        private Vector2 GetAutoVolleyDirection()
+        {
+            if (_firePoint == null)
+                return Vector2.right;
+
+            ResolveAutoTarget();
+            if (_autoTarget == null)
+                return _firePoint.right;
+
+            Vector3 firePosition = _firePoint.position;
+            Vector2 direction = _autoTarget.position - firePosition;
+            if (direction.sqrMagnitude < 0.0001f)
+                direction = _firePoint.right;
+            return direction.normalized;
+        }
+
+        private void ResolveAutoTarget()
+        {
+            if (_autoTarget != null)
+                return;
+
+            try
+            {
+                GameObject taggedEnemy = GameObject.FindGameObjectWithTag("Enemy");
+                if (taggedEnemy != null)
+                {
+                    _autoTarget = taggedEnemy.transform;
+                    return;
+                }
+            }
+            catch (UnityException)
+            {
+            }
+
+            GameObject namedEnemy = GameObject.Find("EnemyDummy");
+            if (namedEnemy != null)
+                _autoTarget = namedEnemy.transform;
+        }
+
+        private void StopAutoVolleyRoutine(bool notifyCompletion = true)
+        {
+            if (_autoVolleyRoutine == null)
+                return;
+
+            StopCoroutine(_autoVolleyRoutine);
+            _autoVolleyRoutine = null;
+
+            if (notifyCompletion)
+                CompleteVolleySequence();
+        }
+
+        private void CompleteVolleySequence()
+        {
+            if (_isVolleyPending == false)
+                return;
+
+            _isVolleyPending = false;
+            onVolleySequenceCompleted();
+        }
+
+    }
+}

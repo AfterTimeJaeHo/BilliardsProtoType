@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Aftertime.SecretSome.BilliardsPrototype
 {
@@ -9,11 +9,15 @@ namespace Aftertime.SecretSome.BilliardsPrototype
 
         private CharacterHealth _boundHealth;
         private Vector3 _baseScale = Vector3.one;
+        private Vector3 _baseLocalPosition = Vector3.zero;
 
         private void Awake()
         {
             if (_fillTransform != null)
+            {
                 _baseScale = _fillTransform.localScale;
+                _baseLocalPosition = _fillTransform.localPosition;
+            }
         }
 
         private void OnDestroy()
@@ -26,7 +30,10 @@ namespace Aftertime.SecretSome.BilliardsPrototype
         {
             _fillTransform = fillTransform;
             if (_fillTransform != null)
+            {
                 _baseScale = _fillTransform.localScale;
+                _baseLocalPosition = _fillTransform.localPosition;
+            }
         }
 
         public void Bind(CharacterHealth health)
@@ -51,6 +58,11 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             Vector3 scale = _baseScale;
             scale.x = _baseScale.x * amount;
             _fillTransform.localScale = scale;
+
+            float widthDelta = _baseScale.x - scale.x;
+            Vector3 anchoredPosition = _baseLocalPosition;
+            anchoredPosition.x -= widthDelta * 0.5f;
+            _fillTransform.localPosition = anchoredPosition;
 
             if (_hideWhenEmpty)
                 gameObject.SetActive(amount > 0f);

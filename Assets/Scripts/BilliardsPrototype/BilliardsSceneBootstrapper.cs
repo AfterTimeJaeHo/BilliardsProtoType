@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Aftertime.SecretSome.BilliardsPrototype
@@ -14,8 +15,8 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             if (scene.name.Equals(TargetSceneName) == false)
                 return;
 
-            CharacterHealth archer = EnsureCharacter("ArcherRoot", 40f, new Vector3(0f, -1.1f, 0f), false);
-            CharacterHealth enemy = EnsureCharacter("EnemyDummy", 25f, new Vector3(0f, -1.1f, 0f), true);
+            CharacterHealth archer = EnsureCharacter("ArcherRoot", 100f, new Vector3(0f, -1.1f, 0f), false);
+            CharacterHealth enemy = EnsureCharacter("EnemyDummy", 150f, new Vector3(0f, -1.1f, 0f), true);
 
             CardIconDisplay iconDisplay = EnsureComponent<CardIconDisplay>("ArcherRoot");
             iconDisplay?.ResetIcons();
@@ -27,18 +28,64 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 enemyController.Configure(enemy, archer, modelRoot);
             }
 
-            CardObstacle[] cards = new[]
-            {
-                EnsureCardObstacle("CardObstacle_1"),
-                EnsureCardObstacle("CardObstacle_2"),
-                EnsureCardObstacle("CardObstacle_3"),
-                EnsureCardObstacle("CardObstacle_4")
-            };
+            CardObstacle[] cards = BuildCardPool();
 
             CardSpawnManager spawnManager = EnsureComponent<CardSpawnManager>("PlayfieldRoot");
             if (spawnManager != null)
+            {
                 spawnManager.AssignPool(cards);
+                spawnManager.AssignBlockedZones(CreateBlockedZones());
+            }
         }
+
+        private static CardObstacle[] BuildCardPool()
+        {
+            List<CardObstacle> cards = new List<CardObstacle>();
+            CardObstacle template = null;
+
+            for (int index = 1; index <= 8; index++)
+            {
+                string objectName = $"CardObstacle_{index}";
+                CardObstacle card = EnsureCardObstacle(objectName);
+                if (card == null && template != null)
+                    card = CloneCardObstacle(template, objectName);
+
+                if (card != null)
+                {
+                    cards.Add(card);
+                    if (template == null)
+                        template = card;
+                }
+            }
+
+            return cards.ToArray();
+        }
+
+        private static CardObstacle CloneCardObstacle(CardObstacle template, string cloneName)
+        {
+            if (template == null)
+                return null;
+
+            GameObject cloneObject = Object.Instantiate(template.gameObject, template.transform.parent);
+            cloneObject.name = cloneName;
+            cloneObject.transform.localScale = template.transform.localScale;
+            return cloneObject.GetComponent<CardObstacle>();
+        }
+
+        private static Collider2D[] CreateBlockedZones()
+        {
+            List<Collider2D> blockedZones = new List<Collider2D>();
+            GameObject bounceObstacle = GameObject.Find("BounceObstacle");
+            if (bounceObstacle != null)
+            {
+                Collider2D collider = bounceObstacle.GetComponent<Collider2D>();
+                if (collider != null)
+                    blockedZones.Add(collider);
+            }
+
+            return blockedZones.ToArray();
+        }
+
 
         private static CharacterHealth EnsureCharacter(string objectName, float maxHealth, Vector3 barOffset, bool deactivateOnDeath)
         {
@@ -60,6 +107,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             if (bar != null)
                 health.AssignHealthBar(bar);
 
+            health.UpdateHealthToMax();
             return health;
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -10,27 +10,31 @@ namespace Aftertime.SecretSome.BilliardsPrototype
         [SerializeField] private Vector2 _spawnXRange = new Vector2(2f, 14f);
         [SerializeField] private Vector2 _spawnYRange = new Vector2(1f, 5f);
         [SerializeField] private Vector2 _rotationRange = new Vector2(-40f, 40f);
-        [SerializeField] private int _minSpawnCount = 2;
-        [SerializeField] private int _maxSpawnCount = 4;
+        [SerializeField] private int _minSpawnCount = 4;
+        [SerializeField] private int _maxSpawnCount = 8;
         [SerializeField] private float _minSpacing = 1.25f;
         [SerializeField] private CardObstacle[] _cardPool = new CardObstacle[0];
+        [SerializeField] private Collider2D[] _blockedZones = new Collider2D[0];
 
         private readonly List<CardObstacle> _availableCards = new List<CardObstacle>();
         private readonly List<Vector2> _spawnedPositions = new List<Vector2>();
 
         private void OnEnable()
         {
-            EnemyController.onPlayerTurnBegan += HandlePlayerTurnBegan;
+            ArrowProjectile.onArrowExpired += HandleArrowExpired;
             RespawnCards();
         }
 
         private void OnDisable()
         {
-            EnemyController.onPlayerTurnBegan -= HandlePlayerTurnBegan;
+            ArrowProjectile.onArrowExpired -= HandleArrowExpired;
         }
 
-        private void HandlePlayerTurnBegan()
+        private void HandleArrowExpired(ArrowProjectile.ArrowLifecycleResult result)
         {
+            if (result.Origin != ArrowProjectile.ArrowOrigin.Primary)
+                return;
+
             RespawnCards();
         }
 
@@ -54,6 +58,13 @@ namespace Aftertime.SecretSome.BilliardsPrototype
 
             RespawnCards();
         }
+
+        public void AssignBlockedZones(Collider2D[] zones)
+        {
+            _blockedZones = zones ?? Array.Empty<Collider2D>();
+            RespawnCards();
+        }
+
 
         private void RespawnCards()
         {
@@ -95,6 +106,9 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                         Random.Range(_spawnXRange.x, _spawnXRange.y),
                         Random.Range(_spawnYRange.x, _spawnYRange.y));
 
+                    if (IsBlockedPosition(candidate))
+                        continue;
+
                     bool overlaps = false;
                     foreach (Vector2 existing in _spawnedPositions)
                     {
@@ -124,5 +138,20 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 _spawnedPositions.Add(spawnPosition);
             }
         }
-    }
+    
+
+        private bool IsBlockedPosition(Vector2 position)
+        {
+            if (_blockedZones == null || _blockedZones.Length == 0)
+                return false;
+
+            foreach (Collider2D zone in _blockedZones)
+            {
+                if (zone != null && zone.OverlapPoint(position))
+                    return true;
+            }
+
+            return false;
+        }
+}
 }

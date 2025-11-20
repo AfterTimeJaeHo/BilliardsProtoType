@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Aftertime.SecretSome.BilliardsPrototype
@@ -42,6 +42,16 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             _healthBar = bar;
             _healthBar?.Bind(this);
         }
+
+        public void UpdateHealthToMax()
+        {
+            if (_maxHealth <= 0f)
+                _maxHealth = 1f;
+
+            _currentHealth = _maxHealth;
+            onHealthChanged(NormalizedHealth);
+        }
+
 
         public void SetDeactivateOnDeath(bool value)
         {

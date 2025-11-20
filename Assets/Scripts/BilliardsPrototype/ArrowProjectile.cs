@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using System;
+using UnityEngine;
 
 namespace Aftertime.SecretSome.BilliardsPrototype
 {
@@ -6,6 +7,26 @@ namespace Aftertime.SecretSome.BilliardsPrototype
     [RequireComponent(typeof(Collider2D))]
     public class ArrowProjectile : MonoBehaviour
     {
+        public enum ArrowOrigin
+        {
+            Primary,
+            Bonus
+        }
+
+        public struct ArrowLifecycleResult
+        {
+            public ArrowOrigin Origin;
+            public int CardHitCount;
+
+            public ArrowLifecycleResult(ArrowOrigin origin, int cardHitCount)
+            {
+                Origin = origin;
+                CardHitCount = cardHitCount;
+            }
+        }
+
+        public static event System.Action<ArrowLifecycleResult> onArrowExpired = delegate { };
+
         [SerializeField] private Rigidbody2D _rigidbody;
         [SerializeField] private Collider2D _collider;
         [SerializeField] private LayerMask _bounceMask = ~0;
@@ -22,6 +43,8 @@ namespace Aftertime.SecretSome.BilliardsPrototype
         private float _lifeTimer;
         private Vector2 _travelDirection = Vector2.right;
         private Vector2 _currentPosition;
+        private ArrowOrigin _origin = ArrowOrigin.Primary;
+        private int _cardHitCount;
 
         private void Reset()
         {
@@ -53,13 +76,15 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             ManualSimulate(Time.deltaTime);
         }
 
-        public void Initialize(Vector2 direction, float launchSpeed, int maxBounceCount, LayerMask bounceLayer)
+        public void Initialize(Vector2 direction, float launchSpeed, int maxBounceCount, LayerMask bounceLayer, ArrowOrigin origin)
         {
             _isActive = true;
             _lifeTimer = 0f;
             _currentSpeed = Mathf.Max(launchSpeed, _minimumBounceSpeed);
             _remainingBounces = Mathf.Max(0, maxBounceCount);
             _bounceMask = bounceLayer;
+            _origin = origin;
+            _cardHitCount = 0;
 
             _travelDirection = direction.sqrMagnitude < Mathf.Epsilon ? Vector2.right : direction.normalized;
             _currentPosition = _rigidbody != null ? _rigidbody.position : (Vector2)transform.position;
@@ -109,7 +134,10 @@ namespace Aftertime.SecretSome.BilliardsPrototype
                 }
 
                 if (hitCollider.TryGetComponent(out CardObstacle card))
+                {
+                    _cardHitCount++;
                     card.HandleHit();
+                }
 
                 if (hitCollider.isTrigger)
                 {
@@ -161,6 +189,7 @@ namespace Aftertime.SecretSome.BilliardsPrototype
             if (_collider != null)
                 _collider.enabled = false;
 
+            onArrowExpired(new ArrowLifecycleResult(_origin, _cardHitCount));
             Destroy(gameObject, _destroyDelayAfterStop);
         }
     }
