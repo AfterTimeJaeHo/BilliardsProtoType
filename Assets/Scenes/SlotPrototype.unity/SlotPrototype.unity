@@ -3764,8 +3764,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slotController: {fileID: 1938236767}
-  _pullButton: {fileID: 560705603}
-  _stopButton: {fileID: 212987224}
+  _pullButtonName: PullButton
+  _stopButtonName: SpinStopButton
 --- !u!114 &1938236767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3779,7 +3779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _turnDirector: {fileID: 638362253}
-  _autoStopDelay: 1.8
+  _autoStopDelay: 3
   _lastSymbol: 1
   _lastDamage: 10
   _onRequestStartSpin:

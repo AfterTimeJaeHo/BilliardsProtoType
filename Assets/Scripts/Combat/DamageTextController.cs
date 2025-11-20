@@ -3,10 +3,11 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Aftertime.MyTinyStreamer.Combat
 {
-    // 피해 텍스트를 생성·재생하는 유틸리티
+    // 피해 텍스트를 생성·재생하는 유틸리티 (TMP 사용)
     public static class DamageTextController
     {
         // 화면 오버레이 캔버스 찾거나 생성
@@ -37,31 +38,26 @@ namespace Aftertime.MyTinyStreamer.Combat
             return newCanvas;
         }
 
-        // Enemy 위 위치에 화면 좌표 기반 텍스트를 잠시 띄우고 페이드 처리
-        public static async UniTask ShowAsync(int amount, Transform worldAnchor, Camera camera, Color color, CancellationToken cancellationToken)
+        // Enemy 위 위치에 화면 좌표 기반 텍스트를 잠시 띄우고 페이드 처리 (TMP 폰트 지원)
+        public static async UniTask ShowAsync(int amount, Transform worldAnchor, Camera camera, TMP_FontAsset font, Color color, CancellationToken cancellationToken)
         {
             Canvas canvas = GetOrCreateOverlayCanvas();
             RectTransform canvasRect = canvas.transform as RectTransform;
 
-            Font font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-
-            GameObject go = new GameObject("DamageText");
+            GameObject go = new GameObject("DamageTextTMP");
             go.transform.SetParent(canvas.transform, false);
             RectTransform rect = go.AddComponent<RectTransform>();
-            Text text = go.AddComponent<Text>();
+            TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
             CanvasGroup group = go.AddComponent<CanvasGroup>();
-            Outline outline = go.AddComponent<Outline>();
 
-            text.font = font;
+            if (font != null)
+                text.font = font;
             text.text = "-" + amount.ToString();
             Color textColor = color;
             textColor.a = 1f;
             text.color = textColor;
-            text.alignment = TextAnchor.MiddleCenter;
+            text.alignment = TextAlignmentOptions.Center;
             text.raycastTarget = false;
-
-            outline.effectColor = Color.black;
-            outline.effectDistance = new Vector2(1.5f, -1.5f);
 
             group.alpha = 0f;
 
@@ -127,6 +123,12 @@ namespace Aftertime.MyTinyStreamer.Combat
             }
 
             UnityEngine.Object.Destroy(go);
+        }
+
+        // 하위 호환: 폰트를 별도로 주지 않을 때
+        public static UniTask ShowAsync(int amount, Transform worldAnchor, Camera camera, Color color, CancellationToken cancellationToken)
+        {
+            return ShowAsync(amount, worldAnchor, camera, null, color, cancellationToken);
         }
     }
 }

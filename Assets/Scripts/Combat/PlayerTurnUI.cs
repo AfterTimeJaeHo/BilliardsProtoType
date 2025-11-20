@@ -65,7 +65,7 @@ namespace Aftertime.MyTinyStreamer.Combat
             textRect.offsetMin = Vector2.zero;
             textRect.offsetMax = Vector2.zero;
 
-            Font font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            Font font = Resources.Load<Font>("NanumSquareR SDF");
             _text = textGo.AddComponent<Text>();
             _text.font = font;
             _text.text = _label;
