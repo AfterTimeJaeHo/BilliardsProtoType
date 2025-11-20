@@ -1,4 +1,3 @@
-using Unity.Mathematics.Geometry;
 using UnityEngine;
 
 namespace Aftertime.TeachingAssistantLife.UI
