@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using Aftertime.MyTinyStreamer.Tile;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -209,6 +210,9 @@ namespace Aftertime.MyTinyStreamer.Editor
                 {
                     spriteRenderer.sharedMaterial = sharedMaterial;
                 }
+
+                Aftertime.MyTinyStreamer.Tile.Tile tileComponent = spriteObject.AddComponent<Aftertime.MyTinyStreamer.Tile.Tile>();
+                tileComponent.InitTile(spriteRenderer, tileData.Cell);
             }
         }
 

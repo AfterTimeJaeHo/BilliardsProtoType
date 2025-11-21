@@ -7,7 +7,6 @@ namespace Waving.Tile
     public class GridMap : MonoBehaviour
     {
         [SerializeField] private Tilemap _groundTilemap;
-        [SerializeField] private Tilemap _obstacleTilemap;
 
         /// 월드 좌표 → 셀 좌표
         public Vector3Int WorldToCell(Vector3 worldPos)
@@ -28,10 +27,6 @@ namespace Waving.Tile
         {
             // 바닥 타일이 없으면 못 감
             if (!_groundTilemap.HasTile(cell))
-                return false;
-
-            // 장애물 타일이 있으면 못 감
-            if (_obstacleTilemap != null && _obstacleTilemap.HasTile(cell))
                 return false;
 
             return true;

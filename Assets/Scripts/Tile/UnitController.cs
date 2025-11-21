@@ -1,17 +1,24 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Waving.MyTinyStreamer.Common;
 
-namespace Waving.Tile
+namespace Aftertime.MyTinyStreamer.Tile
 {
     public class UnitController : MonoBehaviour
     {
-        [SerializeField] private GridMap _gridMap;
+        [SerializeField] private Tile _startTile;
         [SerializeField] private float _moveDurationPerTile = 0.15f;
         private bool _isMoving;
+        private Tile _currentTile;
+
+        private void Awake()
+        {
+            _currentTile = _startTile;
+        }
 
         private void OnEnable()
         {
@@ -34,49 +41,60 @@ namespace Waving.Tile
         
         private async UniTaskVoid Move()
         {
-            List<Vector3Int> path = GetPath();
+            Tile target = GetTileFromCursor();
+            Tile origin = _currentTile ?? _startTile;
 
+            if (target == null || origin == null)
+                return;
+
+            if (target.BlocksMovement)
+                return;
+
+            List<Tile> path = PathFinder.FindPath(origin, target);
             if (path == null || path.Count == 0)
                 return;
 
             _isMoving = true;
-            await DoMove();
+            await DoMove(path);
             _isMoving = false;
-
-            List<Vector3Int> GetPath()
+            _currentTile = target;
+        }
+        
+        private async UniTask DoMove(List<Tile> path)
+        {
+            for (int i = 0; i < path.Count; i++)
             {
-                // 마우스 or 터치 좌표
-                Vector2 screenPos = UIInputAction.Instance.UI.Point.ReadValue<Vector2>();
-                float depthToPlane = 0f - Camera.main.transform.position.z; // 카메라 z축 거리 보완 
-                Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, depthToPlane));
-
-                Vector3Int targetCell = _gridMap.WorldToCell(worldPos);
-                targetCell.z = 0;
-
-                Vector3Int currentCell = _gridMap.WorldToCell(transform.position);
-                currentCell.z = 0;
-
-                if (!_gridMap.IsWalkable(targetCell))
-                    return null;
-
-                List<Vector3Int> path = PathFinder.FindPath(_gridMap, currentCell, targetCell);
-
-                return path;
-            }
-            
-            async UniTask DoMove()
-            {
-                foreach (var cell in path)
+                Tile tile = path[i];
+                if (tile == null)
                 {
-                    Vector3 targetWorld = _gridMap.CellToWorldCenter(cell);
-
-                    await transform.DOMove(targetWorld, _moveDurationPerTile)
-                        .SetEase(Ease.Linear)
-                        .ToUniTask();
+                    continue;
                 }
 
+                Vector3 targetWorld = tile.transform.position;
+                await transform.DOMove(targetWorld, _moveDurationPerTile)
+                    .SetEase(Ease.Linear)
+                    .ToUniTask();
             }
         }
+
+        private Tile GetTileFromCursor()
+        {
+            Vector2 screenPos = UIInputAction.Instance.UI.Point.ReadValue<Vector2>();
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+
+            int layerMask = 1 << LayerMask.NameToLayer(Define.TileLayerName);
+
+            RaycastHit2D hit = Physics2D.Raycast(
+                worldPos,
+                Vector2.zero,
+                Mathf.Infinity,
+                layerMask
+            );
+
+            if (hit.collider != null)
+                return hit.collider.GetComponent<Tile>();
+
+            return null;
+        }
     }
-   
 }
