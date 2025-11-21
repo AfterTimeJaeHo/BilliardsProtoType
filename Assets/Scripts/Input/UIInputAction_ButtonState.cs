@@ -31,8 +31,12 @@ public partial class UIInputAction
 
         foreach (InputActionMap actionMap in actionMaps)
         {
-            if (actionMap.name != "Global")
+            if (actionMap.name != "Global" && actionMap.name != "UI")
                 actionMap.Disable();
+            else
+            {
+                actionMap.Enable();
+            }
         }
 
         List<InputAction> inputActions = actionMaps.SelectMany(map => map.actions).ToList();
