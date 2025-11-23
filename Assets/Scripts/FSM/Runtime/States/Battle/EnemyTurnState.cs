@@ -1,22 +1,21 @@
 using System;
 using SRPG;
-using UnityEngine;
 using Waving.Di;
 
 namespace StateMachine.Runtime {
-    public class PlayerTurnState : DIClass,IState 
+    public class EnemyTurnState : DIClass,IState 
     {
         public OnEnter onEnter { get; set; }
         public OnExecute onExecute { get; set; }
         public OnExit onExit { get; set; }
         public void Enter()
         {
-            Debug.Log("Player Turn Enter");
+            throw new NotImplementedException();
         }
 
         public void Execute()
         {
-            
+            throw new NotImplementedException();
         }
 
         public void Exit()

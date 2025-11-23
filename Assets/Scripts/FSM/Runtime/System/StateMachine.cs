@@ -9,15 +9,13 @@ namespace StateMachine.Runtime
 {
     public class StateMachine
     {
-        public Entity OwnerEntity { get; private set; }
         public IState CurState { get; private set; }
         public IState PreState { get; private set; }
         public IState GlobalState { get; private set; }
         private List<StateTransition> transitions;
 
-        public virtual void Init(Entity entity, IState state)
+        public virtual void Init(IState state)
         {
-            OwnerEntity = entity;
             CurState = state;
             PreState = null;
             GlobalState = null;

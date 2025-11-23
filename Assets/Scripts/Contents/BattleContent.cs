@@ -1,25 +1,30 @@
+using Aftertime.SecretSome.Common;
 using Aftertime.SecretSome.Content;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using Waving.Common;
-using Waving.Content;
+using StateMachine.Runtime;
 using Waving.Scene;
 
 namespace Waving.Content
 {
+    using StateMachine = StateMachine.Runtime.StateMachine;
+    
     public class BattleContent : IContent
     {
         public ContentState State { get; }
         
+        private BattleStateMachine stateMachine;
+        
         public void StartContent()
         {
             SceneEntryManager.Instance.Additive(GameScene.SlotPrototype);
+            stateMachine = new BattleStateMachine();
+            stateMachine.Init(null);
+            UpdateExecutor.onUpdate += stateMachine.Execute;
         }
 
         public void PauseContent()
         {
-            throw new System.NotImplementedException();
+            UpdateExecutor.onUpdate -= stateMachine.Execute;
         }
 
         public UniTask StartContentAsync()
@@ -34,13 +39,19 @@ namespace Waving.Content
 
         public void StopContent()
         {
-            throw new System.NotImplementedException();
+            UpdateExecutor.onUpdate -= stateMachine.Execute;
         }
 
         public void ResumeContent()
         {
-            throw new System.NotImplementedException();
+            UpdateExecutor.onUpdate += stateMachine.Execute;
         }
+    }
+    
+    public enum BattleContentsState
+    {
+        PlayerTurn,
+        EnemyTurn
     }
    
 }

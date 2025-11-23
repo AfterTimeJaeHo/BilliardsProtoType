@@ -14,6 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.GraphToolkit.Editor::Unity.GraphToolkit.Editor.Implementation.GraphObjectImp
   m_GraphModel:
     rid: 8602820927505301746
+  m_AssetGuid:
+    m_Value0: 492349056
+    m_Value1: 1259115949
+    m_Value2: 666592190
+    m_Value3: 532930388
+  m_Dirty: 0
+  m_LastWriteTime: 134084140251499966
+  m_LastWriteSize: 9719
+  m_LastWriteHash:
+    'bytes[0]': 221
+    'bytes[1]': 220
+    'bytes[2]': 100
+    'bytes[3]': 100
+    'bytes[4]': 46
+    'bytes[5]': 255
+    'bytes[6]': 105
+    'bytes[7]': 129
+    'bytes[8]': 218
+    'bytes[9]': 181
+    'bytes[10]': 7
+    'bytes[11]': 41
+    'bytes[12]': 253
+    'bytes[13]': 172
+    'bytes[14]': 238
+    'bytes[15]': 130
+  m_IsSubAsset: 0
+  IsLocalSubgraphMigrated: 0
   references:
     version: 2
     RefIds:
@@ -23,198 +50,792 @@ MonoBehaviour:
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
         m_Guid:
+          m_Hash128:
+            'bytes[0]': 203
+            'bytes[1]': 69
+            'bytes[2]': 93
+            'bytes[3]': 205
+            'bytes[4]': 90
+            'bytes[5]': 219
+            'bytes[6]': 105
+            'bytes[7]': 114
+            'bytes[8]': 118
+            'bytes[9]': 196
+            'bytes[10]': 168
+            'bytes[11]': 238
+            'bytes[12]': 135
+            'bytes[13]': 121
+            'bytes[14]': 225
+            'bytes[15]': 37
           m_Value0: 8244361775917385163
           m_Value1: 2729596473894814838
         m_HashGuid:
-          serializedVersion: 2
-          Hash: cb455dcd5adb697276c4a8ee8779e125
+          'bytes[0]': 203
+          'bytes[1]': 69
+          'bytes[2]': 93
+          'bytes[3]': 205
+          'bytes[4]': 90
+          'bytes[5]': 219
+          'bytes[6]': 105
+          'bytes[7]': 114
+          'bytes[8]': 118
+          'bytes[9]': 196
+          'bytes[10]': 168
+          'bytes[11]': 238
+          'bytes[12]': 135
+          'bytes[13]': 121
+          'bytes[14]': 225
+          'bytes[15]': 37
         m_Version: 2
         m_Position: {x: 289.82806, y: 120.234375}
         m_Title: 
         m_Tooltip: 
+        m_SpawnFlags: 0
         m_NodePreviewModel:
           rid: -2
         m_State: 0
+        <Destroyed>k__BackingField: 0
         m_InputConstantsById:
           m_KeyList: []
           m_ValueList: []
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
-            m_ValueList: 
+            m_ValueList: []
         m_OutputPortInfos:
           expandedPortsById:
             m_KeyList: []
-            m_ValueList: 
+            m_ValueList: []
+        m_IconTypeString: 
         m_Collapsed: 0
         m_CurrentModeIndex: 0
         m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_Color:
+            r: 0
+            g: 0
+            b: 0
+            a: 0
           m_HasUserColor: 0
+        m_InDefineNode: 0
         m_Node:
           rid: 5496286530329903312
     - rid: 5496286530329903312
       type: {class: BattleStartNode, ns: StateMachine.Editor, asm: StateMachine.Editor}
-      data: 
+      data: {}
     - rid: 5496286530329903318
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
         m_Guid:
+          m_Hash128:
+            'bytes[0]': 45
+            'bytes[1]': 28
+            'bytes[2]': 44
+            'bytes[3]': 11
+            'bytes[4]': 44
+            'bytes[5]': 57
+            'bytes[6]': 143
+            'bytes[7]': 15
+            'bytes[8]': 195
+            'bytes[9]': 165
+            'bytes[10]': 196
+            'bytes[11]': 88
+            'bytes[12]': 37
+            'bytes[13]': 238
+            'bytes[14]': 223
+            'bytes[15]': 169
           m_Value0: 1121177693567327277
           m_Value1: 12240764156386780611
         m_HashGuid:
-          serializedVersion: 2
-          Hash: 2d1c2c0b2c398f0fc3a5c45825eedfa9
+          'bytes[0]': 45
+          'bytes[1]': 28
+          'bytes[2]': 44
+          'bytes[3]': 11
+          'bytes[4]': 44
+          'bytes[5]': 57
+          'bytes[6]': 143
+          'bytes[7]': 15
+          'bytes[8]': 195
+          'bytes[9]': 165
+          'bytes[10]': 196
+          'bytes[11]': 88
+          'bytes[12]': 37
+          'bytes[13]': 238
+          'bytes[14]': 223
+          'bytes[15]': 169
         m_Version: 2
         m_Position: {x: 533, y: 80.781235}
         m_Title: 
         m_Tooltip: 
+        m_SpawnFlags: 0
         m_NodePreviewModel:
           rid: -2
         m_State: 0
+        <Destroyed>k__BackingField: 0
         m_InputConstantsById:
-          m_KeyList:
-          - __option_stateName
-          m_ValueList:
-          - rid: 5496286530329903320
+          m_KeyList: []
+          m_ValueList: []
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
-            m_ValueList: 
+            m_ValueList: []
         m_OutputPortInfos:
           expandedPortsById:
             m_KeyList: []
-            m_ValueList: 
+            m_ValueList: []
+        m_IconTypeString: 
         m_Collapsed: 0
         m_CurrentModeIndex: 0
         m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_Color:
+            r: 0
+            g: 0
+            b: 0
+            a: 0
           m_HasUserColor: 0
+        m_InDefineNode: 0
         m_Node:
           rid: 5496286530329903321
     - rid: 5496286530329903319
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Guid:
+          m_Hash128:
+            'bytes[0]': 66
+            'bytes[1]': 82
+            'bytes[2]': 47
+            'bytes[3]': 48
+            'bytes[4]': 129
+            'bytes[5]': 148
+            'bytes[6]': 136
+            'bytes[7]': 161
+            'bytes[8]': 125
+            'bytes[9]': 130
+            'bytes[10]': 166
+            'bytes[11]': 97
+            'bytes[12]': 171
+            'bytes[13]': 196
+            'bytes[14]': 131
+            'bytes[15]': 152
           m_Value0: 11639716519519146562
           m_Value1: 10989843756070896253
         m_HashGuid:
-          serializedVersion: 2
-          Hash: 42522f30819488a17d82a661abc48398
+          'bytes[0]': 66
+          'bytes[1]': 82
+          'bytes[2]': 47
+          'bytes[3]': 48
+          'bytes[4]': 129
+          'bytes[5]': 148
+          'bytes[6]': 136
+          'bytes[7]': 161
+          'bytes[8]': 125
+          'bytes[9]': 130
+          'bytes[10]': 166
+          'bytes[11]': 97
+          'bytes[12]': 171
+          'bytes[13]': 196
+          'bytes[14]': 131
+          'bytes[15]': 152
         m_Version: 2
         m_FromPortReference:
           m_NodeModelGuid:
+            m_Hash128:
+              'bytes[0]': 203
+              'bytes[1]': 69
+              'bytes[2]': 93
+              'bytes[3]': 205
+              'bytes[4]': 90
+              'bytes[5]': 219
+              'bytes[6]': 105
+              'bytes[7]': 114
+              'bytes[8]': 118
+              'bytes[9]': 196
+              'bytes[10]': 168
+              'bytes[11]': 238
+              'bytes[12]': 135
+              'bytes[13]': 121
+              'bytes[14]': 225
+              'bytes[15]': 37
             m_Value0: 8244361775917385163
             m_Value1: 2729596473894814838
           m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: cb455dcd5adb697276c4a8ee8779e125
+            'bytes[0]': 203
+            'bytes[1]': 69
+            'bytes[2]': 93
+            'bytes[3]': 205
+            'bytes[4]': 90
+            'bytes[5]': 219
+            'bytes[6]': 105
+            'bytes[7]': 114
+            'bytes[8]': 118
+            'bytes[9]': 196
+            'bytes[10]': 168
+            'bytes[11]': 238
+            'bytes[12]': 135
+            'bytes[13]': 121
+            'bytes[14]': 225
+            'bytes[15]': 37
           m_UniqueId: ExecutionPort
           m_PortDirection: 2
           m_PortOrientation: 0
           m_Title: 
         m_ToPortReference:
           m_NodeModelGuid:
+            m_Hash128:
+              'bytes[0]': 45
+              'bytes[1]': 28
+              'bytes[2]': 44
+              'bytes[3]': 11
+              'bytes[4]': 44
+              'bytes[5]': 57
+              'bytes[6]': 143
+              'bytes[7]': 15
+              'bytes[8]': 195
+              'bytes[9]': 165
+              'bytes[10]': 196
+              'bytes[11]': 88
+              'bytes[12]': 37
+              'bytes[13]': 238
+              'bytes[14]': 223
+              'bytes[15]': 169
             m_Value0: 1121177693567327277
             m_Value1: 12240764156386780611
           m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 2d1c2c0b2c398f0fc3a5c45825eedfa9
+            'bytes[0]': 45
+            'bytes[1]': 28
+            'bytes[2]': 44
+            'bytes[3]': 11
+            'bytes[4]': 44
+            'bytes[5]': 57
+            'bytes[6]': 143
+            'bytes[7]': 15
+            'bytes[8]': 195
+            'bytes[9]': 165
+            'bytes[10]': 196
+            'bytes[11]': 88
+            'bytes[12]': 37
+            'bytes[13]': 238
+            'bytes[14]': 223
+            'bytes[15]': 169
           m_UniqueId: ExecutionPort
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: 
-    - rid: 5496286530329903320
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 
+        m_WireBubbleText: 
     - rid: 5496286530329903321
       type: {class: PlayerTurnNode, ns: StateMachine.Editor, asm: StateMachine.Editor}
-      data: 
+      data: {}
     - rid: 5496286530329903326
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
         m_Guid:
+          m_Hash128:
+            'bytes[0]': 74
+            'bytes[1]': 43
+            'bytes[2]': 152
+            'bytes[3]': 15
+            'bytes[4]': 114
+            'bytes[5]': 50
+            'bytes[6]': 4
+            'bytes[7]': 65
+            'bytes[8]': 28
+            'bytes[9]': 130
+            'bytes[10]': 212
+            'bytes[11]': 220
+            'bytes[12]': 78
+            'bytes[13]': 153
+            'bytes[14]': 7
+            'bytes[15]': 191
           m_Value0: 4684924977841449802
           m_Value1: 13765139350072623644
         m_HashGuid:
-          serializedVersion: 2
-          Hash: 4a2b980f723204411c82d4dc4e9907bf
+          'bytes[0]': 74
+          'bytes[1]': 43
+          'bytes[2]': 152
+          'bytes[3]': 15
+          'bytes[4]': 114
+          'bytes[5]': 50
+          'bytes[6]': 4
+          'bytes[7]': 65
+          'bytes[8]': 28
+          'bytes[9]': 130
+          'bytes[10]': 212
+          'bytes[11]': 220
+          'bytes[12]': 78
+          'bytes[13]': 153
+          'bytes[14]': 7
+          'bytes[15]': 191
         m_Version: 2
         m_Position: {x: 796.07806, y: 17.718735}
         m_Title: 
         m_Tooltip: 
+        m_SpawnFlags: 0
         m_NodePreviewModel:
           rid: -2
         m_State: 0
+        <Destroyed>k__BackingField: 0
         m_InputConstantsById:
-          m_KeyList:
-          - __option_stateName
-          m_ValueList:
-          - rid: 5496286530329903327
+          m_KeyList: []
+          m_ValueList: []
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
-            m_ValueList: 
+            m_ValueList: []
         m_OutputPortInfos:
           expandedPortsById:
             m_KeyList: []
-            m_ValueList: 
+            m_ValueList: []
+        m_IconTypeString: 
         m_Collapsed: 0
         m_CurrentModeIndex: 0
         m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_Color:
+            r: 0
+            g: 0
+            b: 0
+            a: 0
           m_HasUserColor: 0
+        m_InDefineNode: 0
         m_Node:
           rid: 5496286530329903328
-    - rid: 5496286530329903327
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 
     - rid: 5496286530329903328
       type: {class: PlayerTurnNode, ns: StateMachine.Editor, asm: StateMachine.Editor}
-      data: 
+      data: {}
     - rid: 5496286530329903329
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Guid:
+          m_Hash128:
+            'bytes[0]': 98
+            'bytes[1]': 11
+            'bytes[2]': 50
+            'bytes[3]': 198
+            'bytes[4]': 123
+            'bytes[5]': 225
+            'bytes[6]': 116
+            'bytes[7]': 137
+            'bytes[8]': 8
+            'bytes[9]': 20
+            'bytes[10]': 46
+            'bytes[11]': 173
+            'bytes[12]': 179
+            'bytes[13]': 163
+            'bytes[14]': 38
+            'bytes[15]': 242
           m_Value0: 9904789402216958818
           m_Value1: 17448813798393517064
         m_HashGuid:
-          serializedVersion: 2
-          Hash: 620b32c67be1748908142eadb3a326f2
+          'bytes[0]': 98
+          'bytes[1]': 11
+          'bytes[2]': 50
+          'bytes[3]': 198
+          'bytes[4]': 123
+          'bytes[5]': 225
+          'bytes[6]': 116
+          'bytes[7]': 137
+          'bytes[8]': 8
+          'bytes[9]': 20
+          'bytes[10]': 46
+          'bytes[11]': 173
+          'bytes[12]': 179
+          'bytes[13]': 163
+          'bytes[14]': 38
+          'bytes[15]': 242
         m_Version: 2
         m_FromPortReference:
           m_NodeModelGuid:
+            m_Hash128:
+              'bytes[0]': 45
+              'bytes[1]': 28
+              'bytes[2]': 44
+              'bytes[3]': 11
+              'bytes[4]': 44
+              'bytes[5]': 57
+              'bytes[6]': 143
+              'bytes[7]': 15
+              'bytes[8]': 195
+              'bytes[9]': 165
+              'bytes[10]': 196
+              'bytes[11]': 88
+              'bytes[12]': 37
+              'bytes[13]': 238
+              'bytes[14]': 223
+              'bytes[15]': 169
             m_Value0: 1121177693567327277
             m_Value1: 12240764156386780611
           m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 2d1c2c0b2c398f0fc3a5c45825eedfa9
+            'bytes[0]': 45
+            'bytes[1]': 28
+            'bytes[2]': 44
+            'bytes[3]': 11
+            'bytes[4]': 44
+            'bytes[5]': 57
+            'bytes[6]': 143
+            'bytes[7]': 15
+            'bytes[8]': 195
+            'bytes[9]': 165
+            'bytes[10]': 196
+            'bytes[11]': 88
+            'bytes[12]': 37
+            'bytes[13]': 238
+            'bytes[14]': 223
+            'bytes[15]': 169
           m_UniqueId: StateLink
           m_PortDirection: 2
           m_PortOrientation: 0
           m_Title: State
         m_ToPortReference:
           m_NodeModelGuid:
+            m_Hash128:
+              'bytes[0]': 74
+              'bytes[1]': 43
+              'bytes[2]': 152
+              'bytes[3]': 15
+              'bytes[4]': 114
+              'bytes[5]': 50
+              'bytes[6]': 4
+              'bytes[7]': 65
+              'bytes[8]': 28
+              'bytes[9]': 130
+              'bytes[10]': 212
+              'bytes[11]': 220
+              'bytes[12]': 78
+              'bytes[13]': 153
+              'bytes[14]': 7
+              'bytes[15]': 191
             m_Value0: 4684924977841449802
             m_Value1: 13765139350072623644
           m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 4a2b980f723204411c82d4dc4e9907bf
+            'bytes[0]': 74
+            'bytes[1]': 43
+            'bytes[2]': 152
+            'bytes[3]': 15
+            'bytes[4]': 114
+            'bytes[5]': 50
+            'bytes[6]': 4
+            'bytes[7]': 65
+            'bytes[8]': 28
+            'bytes[9]': 130
+            'bytes[10]': 212
+            'bytes[11]': 220
+            'bytes[12]': 78
+            'bytes[13]': 153
+            'bytes[14]': 7
+            'bytes[15]': 191
           m_UniqueId: ExecutionPort
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: 
+        m_WireBubbleText: 
+    - rid: 5496286546667765834
+      type: {class: StateMachineDirectorGraph, ns: StateMachine.Editor, asm: Assembly-CSharp-Editor}
+      data:
+        m_Implementation:
+          m_Guid:
+            m_Hash128:
+              'bytes[0]': 70
+              'bytes[1]': 93
+              'bytes[2]': 66
+              'bytes[3]': 58
+              'bytes[4]': 138
+              'bytes[5]': 174
+              'bytes[6]': 76
+              'bytes[7]': 246
+              'bytes[8]': 120
+              'bytes[9]': 169
+              'bytes[10]': 49
+              'bytes[11]': 208
+              'bytes[12]': 158
+              'bytes[13]': 220
+              'bytes[14]': 163
+              'bytes[15]': 74
+            m_Value0: 17747752140266429766
+            m_Value1: 5378384954666363256
+          m_HashGuid:
+            'bytes[0]': 70
+            'bytes[1]': 93
+            'bytes[2]': 66
+            'bytes[3]': 58
+            'bytes[4]': 138
+            'bytes[5]': 174
+            'bytes[6]': 76
+            'bytes[7]': 246
+            'bytes[8]': 120
+            'bytes[9]': 169
+            'bytes[10]': 49
+            'bytes[11]': 208
+            'bytes[12]': 158
+            'bytes[13]': 220
+            'bytes[14]': 163
+            'bytes[15]': 74
+          m_Name: 
+          m_GraphNodeModels:
+          - rid: 5496286530329903311
+          - rid: 5496286530329903318
+          - rid: 5496286530329903326
+          m_GraphWireModels:
+          - rid: 5496286530329903319
+          - rid: 5496286530329903329
+          m_GraphStickyNoteModels: []
+          m_GraphPlacematModels: []
+          m_GraphVariableModels: []
+          m_GraphPortalModels: []
+          m_SectionModels:
+          - rid: 8602820927505301747
+          m_LocalSubgraphs: []
+          m_LastKnownBounds:
+            x: 290
+            y: 18
+            width: 665
+            height: 232
+          m_GraphElementMetaData:
+          - m_Guid:
+              m_Hash128:
+                'bytes[0]': 203
+                'bytes[1]': 69
+                'bytes[2]': 93
+                'bytes[3]': 205
+                'bytes[4]': 90
+                'bytes[5]': 219
+                'bytes[6]': 105
+                'bytes[7]': 114
+                'bytes[8]': 118
+                'bytes[9]': 196
+                'bytes[10]': 168
+                'bytes[11]': 238
+                'bytes[12]': 135
+                'bytes[13]': 121
+                'bytes[14]': 225
+                'bytes[15]': 37
+              m_Value0: 8244361775917385163
+              m_Value1: 2729596473894814838
+            m_HashGuid:
+              'bytes[0]': 203
+              'bytes[1]': 69
+              'bytes[2]': 93
+              'bytes[3]': 205
+              'bytes[4]': 90
+              'bytes[5]': 219
+              'bytes[6]': 105
+              'bytes[7]': 114
+              'bytes[8]': 118
+              'bytes[9]': 196
+              'bytes[10]': 168
+              'bytes[11]': 238
+              'bytes[12]': 135
+              'bytes[13]': 121
+              'bytes[14]': 225
+              'bytes[15]': 37
+            m_Category: 0
+            m_Index: 0
+            <ToRemove>k__BackingField: 0
+          - m_Guid:
+              m_Hash128:
+                'bytes[0]': 45
+                'bytes[1]': 28
+                'bytes[2]': 44
+                'bytes[3]': 11
+                'bytes[4]': 44
+                'bytes[5]': 57
+                'bytes[6]': 143
+                'bytes[7]': 15
+                'bytes[8]': 195
+                'bytes[9]': 165
+                'bytes[10]': 196
+                'bytes[11]': 88
+                'bytes[12]': 37
+                'bytes[13]': 238
+                'bytes[14]': 223
+                'bytes[15]': 169
+              m_Value0: 1121177693567327277
+              m_Value1: 12240764156386780611
+            m_HashGuid:
+              'bytes[0]': 45
+              'bytes[1]': 28
+              'bytes[2]': 44
+              'bytes[3]': 11
+              'bytes[4]': 44
+              'bytes[5]': 57
+              'bytes[6]': 143
+              'bytes[7]': 15
+              'bytes[8]': 195
+              'bytes[9]': 165
+              'bytes[10]': 196
+              'bytes[11]': 88
+              'bytes[12]': 37
+              'bytes[13]': 238
+              'bytes[14]': 223
+              'bytes[15]': 169
+            m_Category: 0
+            m_Index: 1
+            <ToRemove>k__BackingField: 0
+          - m_Guid:
+              m_Hash128:
+                'bytes[0]': 66
+                'bytes[1]': 82
+                'bytes[2]': 47
+                'bytes[3]': 48
+                'bytes[4]': 129
+                'bytes[5]': 148
+                'bytes[6]': 136
+                'bytes[7]': 161
+                'bytes[8]': 125
+                'bytes[9]': 130
+                'bytes[10]': 166
+                'bytes[11]': 97
+                'bytes[12]': 171
+                'bytes[13]': 196
+                'bytes[14]': 131
+                'bytes[15]': 152
+              m_Value0: 11639716519519146562
+              m_Value1: 10989843756070896253
+            m_HashGuid:
+              'bytes[0]': 66
+              'bytes[1]': 82
+              'bytes[2]': 47
+              'bytes[3]': 48
+              'bytes[4]': 129
+              'bytes[5]': 148
+              'bytes[6]': 136
+              'bytes[7]': 161
+              'bytes[8]': 125
+              'bytes[9]': 130
+              'bytes[10]': 166
+              'bytes[11]': 97
+              'bytes[12]': 171
+              'bytes[13]': 196
+              'bytes[14]': 131
+              'bytes[15]': 152
+            m_Category: 2
+            m_Index: 0
+            <ToRemove>k__BackingField: 0
+          - m_Guid:
+              m_Hash128:
+                'bytes[0]': 74
+                'bytes[1]': 43
+                'bytes[2]': 152
+                'bytes[3]': 15
+                'bytes[4]': 114
+                'bytes[5]': 50
+                'bytes[6]': 4
+                'bytes[7]': 65
+                'bytes[8]': 28
+                'bytes[9]': 130
+                'bytes[10]': 212
+                'bytes[11]': 220
+                'bytes[12]': 78
+                'bytes[13]': 153
+                'bytes[14]': 7
+                'bytes[15]': 191
+              m_Value0: 4684924977841449802
+              m_Value1: 13765139350072623644
+            m_HashGuid:
+              'bytes[0]': 74
+              'bytes[1]': 43
+              'bytes[2]': 152
+              'bytes[3]': 15
+              'bytes[4]': 114
+              'bytes[5]': 50
+              'bytes[6]': 4
+              'bytes[7]': 65
+              'bytes[8]': 28
+              'bytes[9]': 130
+              'bytes[10]': 212
+              'bytes[11]': 220
+              'bytes[12]': 78
+              'bytes[13]': 153
+              'bytes[14]': 7
+              'bytes[15]': 191
+            m_Category: 0
+            m_Index: 2
+            <ToRemove>k__BackingField: 0
+          - m_Guid:
+              m_Hash128:
+                'bytes[0]': 98
+                'bytes[1]': 11
+                'bytes[2]': 50
+                'bytes[3]': 198
+                'bytes[4]': 123
+                'bytes[5]': 225
+                'bytes[6]': 116
+                'bytes[7]': 137
+                'bytes[8]': 8
+                'bytes[9]': 20
+                'bytes[10]': 46
+                'bytes[11]': 173
+                'bytes[12]': 179
+                'bytes[13]': 163
+                'bytes[14]': 38
+                'bytes[15]': 242
+              m_Value0: 9904789402216958818
+              m_Value1: 17448813798393517064
+            m_HashGuid:
+              'bytes[0]': 98
+              'bytes[1]': 11
+              'bytes[2]': 50
+              'bytes[3]': 198
+              'bytes[4]': 123
+              'bytes[5]': 225
+              'bytes[6]': 116
+              'bytes[7]': 137
+              'bytes[8]': 8
+              'bytes[9]': 20
+              'bytes[10]': 46
+              'bytes[11]': 173
+              'bytes[12]': 179
+              'bytes[13]': 163
+              'bytes[14]': 38
+              'bytes[15]': 242
+            m_Category: 2
+            m_Index: 1
+            <ToRemove>k__BackingField: 0
+          m_EntryPoint:
+            rid: 5496286530329903311
+          m_PlaceholderData:
+            m_KeyList: []
+            m_ValueList: []
+          <GraphObject>k__BackingField: {fileID: 1}
+          m_Graph:
+            rid: 5496286546667765834
     - rid: 8602820927505301746
       type: {class: GraphModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
         m_Guid:
+          m_Hash128:
+            'bytes[0]': 70
+            'bytes[1]': 93
+            'bytes[2]': 66
+            'bytes[3]': 58
+            'bytes[4]': 138
+            'bytes[5]': 174
+            'bytes[6]': 76
+            'bytes[7]': 246
+            'bytes[8]': 120
+            'bytes[9]': 169
+            'bytes[10]': 49
+            'bytes[11]': 208
+            'bytes[12]': 158
+            'bytes[13]': 220
+            'bytes[14]': 163
+            'bytes[15]': 74
           m_Value0: 17747752140266429766
           m_Value1: 5378384954666363256
         m_HashGuid:
-          serializedVersion: 2
-          Hash: 465d423a8aae4cf678a931d09edca34a
+          'bytes[0]': 70
+          'bytes[1]': 93
+          'bytes[2]': 66
+          'bytes[3]': 58
+          'bytes[4]': 138
+          'bytes[5]': 174
+          'bytes[6]': 76
+          'bytes[7]': 246
+          'bytes[8]': 120
+          'bytes[9]': 169
+          'bytes[10]': 49
+          'bytes[11]': 208
+          'bytes[12]': 158
+          'bytes[13]': 220
+          'bytes[14]': 163
+          'bytes[15]': 74
         m_Name: 
         m_GraphNodeModels:
         - rid: 5496286530329903311
@@ -231,68 +852,259 @@ MonoBehaviour:
         - rid: 8602820927505301747
         m_LocalSubgraphs: []
         m_LastKnownBounds:
-          serializedVersion: 2
           x: 290
           y: 18
           width: 665
           height: 232
         m_GraphElementMetaData:
         - m_Guid:
+            m_Hash128:
+              'bytes[0]': 203
+              'bytes[1]': 69
+              'bytes[2]': 93
+              'bytes[3]': 205
+              'bytes[4]': 90
+              'bytes[5]': 219
+              'bytes[6]': 105
+              'bytes[7]': 114
+              'bytes[8]': 118
+              'bytes[9]': 196
+              'bytes[10]': 168
+              'bytes[11]': 238
+              'bytes[12]': 135
+              'bytes[13]': 121
+              'bytes[14]': 225
+              'bytes[15]': 37
             m_Value0: 8244361775917385163
             m_Value1: 2729596473894814838
           m_HashGuid:
-            serializedVersion: 2
-            Hash: cb455dcd5adb697276c4a8ee8779e125
+            'bytes[0]': 203
+            'bytes[1]': 69
+            'bytes[2]': 93
+            'bytes[3]': 205
+            'bytes[4]': 90
+            'bytes[5]': 219
+            'bytes[6]': 105
+            'bytes[7]': 114
+            'bytes[8]': 118
+            'bytes[9]': 196
+            'bytes[10]': 168
+            'bytes[11]': 238
+            'bytes[12]': 135
+            'bytes[13]': 121
+            'bytes[14]': 225
+            'bytes[15]': 37
           m_Category: 0
           m_Index: 0
+          <ToRemove>k__BackingField: 0
         - m_Guid:
+            m_Hash128:
+              'bytes[0]': 45
+              'bytes[1]': 28
+              'bytes[2]': 44
+              'bytes[3]': 11
+              'bytes[4]': 44
+              'bytes[5]': 57
+              'bytes[6]': 143
+              'bytes[7]': 15
+              'bytes[8]': 195
+              'bytes[9]': 165
+              'bytes[10]': 196
+              'bytes[11]': 88
+              'bytes[12]': 37
+              'bytes[13]': 238
+              'bytes[14]': 223
+              'bytes[15]': 169
             m_Value0: 1121177693567327277
             m_Value1: 12240764156386780611
           m_HashGuid:
-            serializedVersion: 2
-            Hash: 2d1c2c0b2c398f0fc3a5c45825eedfa9
+            'bytes[0]': 45
+            'bytes[1]': 28
+            'bytes[2]': 44
+            'bytes[3]': 11
+            'bytes[4]': 44
+            'bytes[5]': 57
+            'bytes[6]': 143
+            'bytes[7]': 15
+            'bytes[8]': 195
+            'bytes[9]': 165
+            'bytes[10]': 196
+            'bytes[11]': 88
+            'bytes[12]': 37
+            'bytes[13]': 238
+            'bytes[14]': 223
+            'bytes[15]': 169
           m_Category: 0
           m_Index: 1
+          <ToRemove>k__BackingField: 0
         - m_Guid:
+            m_Hash128:
+              'bytes[0]': 66
+              'bytes[1]': 82
+              'bytes[2]': 47
+              'bytes[3]': 48
+              'bytes[4]': 129
+              'bytes[5]': 148
+              'bytes[6]': 136
+              'bytes[7]': 161
+              'bytes[8]': 125
+              'bytes[9]': 130
+              'bytes[10]': 166
+              'bytes[11]': 97
+              'bytes[12]': 171
+              'bytes[13]': 196
+              'bytes[14]': 131
+              'bytes[15]': 152
             m_Value0: 11639716519519146562
             m_Value1: 10989843756070896253
           m_HashGuid:
-            serializedVersion: 2
-            Hash: 42522f30819488a17d82a661abc48398
+            'bytes[0]': 66
+            'bytes[1]': 82
+            'bytes[2]': 47
+            'bytes[3]': 48
+            'bytes[4]': 129
+            'bytes[5]': 148
+            'bytes[6]': 136
+            'bytes[7]': 161
+            'bytes[8]': 125
+            'bytes[9]': 130
+            'bytes[10]': 166
+            'bytes[11]': 97
+            'bytes[12]': 171
+            'bytes[13]': 196
+            'bytes[14]': 131
+            'bytes[15]': 152
           m_Category: 2
           m_Index: 0
+          <ToRemove>k__BackingField: 0
         - m_Guid:
+            m_Hash128:
+              'bytes[0]': 74
+              'bytes[1]': 43
+              'bytes[2]': 152
+              'bytes[3]': 15
+              'bytes[4]': 114
+              'bytes[5]': 50
+              'bytes[6]': 4
+              'bytes[7]': 65
+              'bytes[8]': 28
+              'bytes[9]': 130
+              'bytes[10]': 212
+              'bytes[11]': 220
+              'bytes[12]': 78
+              'bytes[13]': 153
+              'bytes[14]': 7
+              'bytes[15]': 191
             m_Value0: 4684924977841449802
             m_Value1: 13765139350072623644
           m_HashGuid:
-            serializedVersion: 2
-            Hash: 4a2b980f723204411c82d4dc4e9907bf
+            'bytes[0]': 74
+            'bytes[1]': 43
+            'bytes[2]': 152
+            'bytes[3]': 15
+            'bytes[4]': 114
+            'bytes[5]': 50
+            'bytes[6]': 4
+            'bytes[7]': 65
+            'bytes[8]': 28
+            'bytes[9]': 130
+            'bytes[10]': 212
+            'bytes[11]': 220
+            'bytes[12]': 78
+            'bytes[13]': 153
+            'bytes[14]': 7
+            'bytes[15]': 191
           m_Category: 0
           m_Index: 2
+          <ToRemove>k__BackingField: 0
         - m_Guid:
+            m_Hash128:
+              'bytes[0]': 98
+              'bytes[1]': 11
+              'bytes[2]': 50
+              'bytes[3]': 198
+              'bytes[4]': 123
+              'bytes[5]': 225
+              'bytes[6]': 116
+              'bytes[7]': 137
+              'bytes[8]': 8
+              'bytes[9]': 20
+              'bytes[10]': 46
+              'bytes[11]': 173
+              'bytes[12]': 179
+              'bytes[13]': 163
+              'bytes[14]': 38
+              'bytes[15]': 242
             m_Value0: 9904789402216958818
             m_Value1: 17448813798393517064
           m_HashGuid:
-            serializedVersion: 2
-            Hash: 620b32c67be1748908142eadb3a326f2
+            'bytes[0]': 98
+            'bytes[1]': 11
+            'bytes[2]': 50
+            'bytes[3]': 198
+            'bytes[4]': 123
+            'bytes[5]': 225
+            'bytes[6]': 116
+            'bytes[7]': 137
+            'bytes[8]': 8
+            'bytes[9]': 20
+            'bytes[10]': 46
+            'bytes[11]': 173
+            'bytes[12]': 179
+            'bytes[13]': 163
+            'bytes[14]': 38
+            'bytes[15]': 242
           m_Category: 2
           m_Index: 1
+          <ToRemove>k__BackingField: 0
         m_EntryPoint:
           rid: 5496286530329903311
+        m_PlaceholderData:
+          m_KeyList: []
+          m_ValueList: []
+        <GraphObject>k__BackingField: {fileID: 1}
         m_Graph:
-          rid: 8602820927505301748
+          rid: 5496286546667765834
     - rid: 8602820927505301747
       type: {class: SectionModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Guid:
+          m_Hash128:
+            'bytes[0]': 80
+            'bytes[1]': 131
+            'bytes[2]': 122
+            'bytes[3]': 101
+            'bytes[4]': 127
+            'bytes[5]': 149
+            'bytes[6]': 189
+            'bytes[7]': 53
+            'bytes[8]': 68
+            'bytes[9]': 64
+            'bytes[10]': 181
+            'bytes[11]': 231
+            'bytes[12]': 161
+            'bytes[13]': 105
+            'bytes[14]': 33
+            'bytes[15]': 77
           m_Value0: 3872415629004407632
           m_Value1: 5557839559249969220
         m_HashGuid:
-          serializedVersion: 2
-          Hash: 50837a657f95bd354440b5e7a169214d
+          'bytes[0]': 80
+          'bytes[1]': 131
+          'bytes[2]': 122
+          'bytes[3]': 101
+          'bytes[4]': 127
+          'bytes[5]': 149
+          'bytes[6]': 189
+          'bytes[7]': 53
+          'bytes[8]': 68
+          'bytes[9]': 64
+          'bytes[10]': 181
+          'bytes[11]': 231
+          'bytes[12]': 161
+          'bytes[13]': 105
+          'bytes[14]': 33
+          'bytes[15]': 77
         m_Version: 2
         m_Items: []
         m_Title: 
-    - rid: 8602820927505301748
-      type: {class: StateMachineDirectorGraph, ns: StateMachine.Editor, asm: StateMachine.Editor}
-      data: 
