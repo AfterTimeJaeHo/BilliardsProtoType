@@ -41,7 +41,15 @@ namespace Aftertime.SecretSome.Content
 
         protected virtual void Awake()
         {
-            DontDestroyOnLoad(gameObject);
+            Transform parent = gameObject.transform.parent;
+            if (parent != null)
+            {
+                DontDestroyOnLoad(parent);
+            }
+            else
+            {
+                DontDestroyOnLoad(this);    
+            }
             _contents = CreateContents();
             SceneEntryManager.Instance.Additive(GameScene.Map);
         }

@@ -4,12 +4,12 @@ using System.Threading;
 using Aftertime.SecretSome.Content;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using MyNamespace;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Waving.Content;
 using Waving.Tile;
 using Random = System.Random;
 

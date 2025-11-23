@@ -2,13 +2,16 @@ using Aftertime.SecretSome.Content;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Waving.Common;
+using Waving.Content;
 using Waving.Scene;
 
-namespace MyNamespace
+namespace Waving.Content
 {
     public class BattleContent : IContent
     {
         public ContentState State { get; }
+        
         public void StartContent()
         {
             SceneEntryManager.Instance.Additive(GameScene.SlotPrototype);
@@ -16,6 +19,7 @@ namespace MyNamespace
 
         public void PauseContent()
         {
+            throw new System.NotImplementedException();
         }
 
         public UniTask StartContentAsync()
@@ -30,10 +34,12 @@ namespace MyNamespace
 
         public void StopContent()
         {
+            throw new System.NotImplementedException();
         }
 
         public void ResumeContent()
         {
+            throw new System.NotImplementedException();
         }
     }
    

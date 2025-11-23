@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Waving.Common;
 
 namespace Aftertime.SecretSome.Content
 {
