@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Aftertime.SecretSome.Content;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using MyNamespace;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -69,6 +71,7 @@ namespace Aftertime.MyTinyStreamer.Tile
             }
 
             UIInputAction.Instance.Global.LeftClick.performed += OnLeftClick;
+            onEnemyFaced += ContentRunner.StartContent<BattleContent>;
         }
 
         private void OnDisable()
@@ -213,6 +216,7 @@ namespace Aftertime.MyTinyStreamer.Tile
                 _waitingFork = false;
                 _selectedCell = null;
                 _forkCandidates.Clear();
+                RaiseEnemyEncounterIfNeeded(current);
                 _isMoving = false;
                 SetDiceButtonState(true);
                 _cts?.Dispose();
@@ -242,24 +246,18 @@ namespace Aftertime.MyTinyStreamer.Tile
         }
 
         private void RaiseArrivalEvents(Vector3Int cell)
-
         {
-
             _onArrivedCell.Invoke(cell);
-
-            Tile tile = FindTile(cell);
-
-            if (tile != null && tile.TileType == TileType.Enemy)
-
-            {
-
-                onEnemyFaced?.Invoke();
-
-            }
-
         }
 
-
+        private void RaiseEnemyEncounterIfNeeded(Vector3Int cell)
+        {
+            Tile tile = FindTile(cell);
+            if (tile != null && tile.TileType == TileType.Enemy)
+            {
+                onEnemyFaced?.Invoke();
+            }
+        }
 
         /// <summary>막혔??????로 물러????보까?? ??함??????구합??다.</summary>
         private List<Vector3Int> GetMoveCandidatesAllowBack(Vector3Int current, Vector3Int? last)

@@ -56,7 +56,10 @@ namespace Aftertime.StorylineEngine
             }
         }
 
-        public abstract void Initialize();
+        public virtual void Initialize()
+        {
+            
+        }
 
         public virtual void OnApplicationQuit()
         {
