@@ -26,12 +26,7 @@ namespace Waving.Content
 
         public BattleContent()
         {
-            onEnterDirectingComplete += () =>
-            {
-                CanvasGroup mainCanvasGroup = _container.MainCanvasGroup;
-                mainCanvasGroup.interactable = true;
-                mainCanvasGroup.blocksRaycasts = true;
-            };
+            onEnterDirectingComplete += OnEnterDirectingComplete;
         }
 
         public async void StartContent()
@@ -41,10 +36,6 @@ namespace Waving.Content
             ResetView();
             
             ShowEnterDirecting();
-            
-            stateMachine = new BattleStateMachine();
-            stateMachine.Init(null);
-            UpdateExecutor.onUpdate += stateMachine.Execute;
         }
 
         public void PauseContent()
@@ -93,8 +84,17 @@ namespace Waving.Content
             sequence.Append(enterCanvasGroup.transform.DOScale(1.2f, EnterCanvasGroupScaleDuration));
             sequence.Join(enterCanvasGroup.DOFade(0, EnterCanvasGroupScaleDuration));
             sequence.Append(mainCanvasGroup.DOFade(1, MainCanvasGroupScaleDuration));
-            
-            onEnterDirectingComplete.Invoke();
+            sequence.onComplete += () => onEnterDirectingComplete.Invoke();
+        }
+        
+        private void OnEnterDirectingComplete()
+        {
+            CanvasGroup mainCanvasGroup = _container.MainCanvasGroup;
+            mainCanvasGroup.interactable = true;
+            mainCanvasGroup.blocksRaycasts = true;
+            stateMachine = new BattleStateMachine();
+            stateMachine.Init(null);
+            UpdateExecutor.onUpdate += stateMachine.Execute;
         }
 
         private void ResetView()

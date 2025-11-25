@@ -16,6 +16,9 @@ namespace StateMachine.Runtime
             EnemyTurnState monsterTurnState = new EnemyTurnState();
             states.Add(BattleContentsState.PlayerTurn, playerTurnState);
             states.Add(BattleContentsState.EnemyTurn, monsterTurnState);
+
+            playerTurnState.onSlotEvaluated += () => ChangeState(monsterTurnState);
+            monsterTurnState.onAttack += () => ChangeState(playerTurnState);
             
             base.Init(playerTurnState);
         }

@@ -1,21 +1,31 @@
+using System;
 using Aftertime.MyTinyStreamer.Slots;
+using Aftertime.SecretSome.UI.Popup;
 using Cysharp.Threading.Tasks;
 using SRPG;
 using Waving.Battle;
 using Waving.Di;
+using Waving.UI;
 
 namespace StateMachine.Runtime
 {
     public class PlayerTurnState : DIClass, IState
     {
+        public event Action onSlotEvaluated;
+        
         public OnEnter onEnter { get; set; }
         public OnExecute onExecute { get; set; }
         public OnExit onExit { get; set; }
 
         [Inject] private PlayerTurnContainer _container;
 
-        public void Enter()
+
+        public async void Enter()
         {
+            PopupManager.Instance.Push<TurnChangePopup>();
+            TurnChangePopup turnChangePopup = PopupManager.Instance.GetPopup<TurnChangePopup>();
+            await turnChangePopup.UpdatePlayerTurnView();
+            
             SlotController slotController = _container.SlotController;
             slotController.Init();
             slotController.onSlotEvaluated += OnSlotEvaluated;
@@ -29,6 +39,7 @@ namespace StateMachine.Runtime
         {
             SlotController slotController = _container.SlotController;
             slotController.onSlotEvaluated -= OnSlotEvaluated;
+            slotController.SetInteractable(false);
         }
         
 
@@ -41,6 +52,7 @@ namespace StateMachine.Runtime
 
             IncreaseShield(shieldCount);
             await AttackEnemy(attackCount);
+            onSlotEvaluated.Invoke();
         }
 
         private async UniTask AttackEnemy(int attackCount)

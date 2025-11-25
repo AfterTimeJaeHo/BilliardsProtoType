@@ -1,26 +1,29 @@
 using System;
+using Aftertime.SecretSome.UI.Popup;
 using SRPG;
 using Waving.Di;
+using Waving.UI;
 
 namespace StateMachine.Runtime {
     public class EnemyTurnState : DIClass,IState 
     {
+        public event Action onAttack;
+        
         public OnEnter onEnter { get; set; }
         public OnExecute onExecute { get; set; }
         public OnExit onExit { get; set; }
-        public void Enter()
+        public async void Enter()
         {
-            throw new NotImplementedException();
+            TurnChangePopup turnChangePopup = PopupManager.Instance.GetPopup<TurnChangePopup>();
+            await turnChangePopup.UpdateEnemyTurnView();
         }
 
         public void Execute()
         {
-            throw new NotImplementedException();
         }
 
         public void Exit()
         {
-            throw new NotImplementedException();
         }
     }
 }

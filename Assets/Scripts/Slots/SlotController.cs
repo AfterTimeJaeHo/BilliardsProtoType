@@ -60,7 +60,6 @@ namespace Aftertime.MyTinyStreamer.Slots
 
             _existRerollCount = MaxRerollCount;
             UpdateGaugeUI();
-            _statusText.text = "대기";
             RegisterUIEvents();
             _spinButtonText.text = "SPIN";
             // Pull 버튼이 존재하면: 당기기/정지 분리 구성
@@ -68,6 +67,12 @@ namespace Aftertime.MyTinyStreamer.Slots
             _spinStopButton.interactable = false; // 시작 시 Stop 비활성화
             _pullButton.interactable = true;
             _spinButtonText.text = "STOP"; // Stop 전용 버튼 텍스트
+        }
+
+        public void SetInteractable(bool interactable)
+        {
+            _spinStopButton.interactable = interactable;
+            _pullButton.interactable = interactable;
         }
 
 
@@ -212,7 +217,6 @@ namespace Aftertime.MyTinyStreamer.Slots
             _pullButton.interactable = false;
             _spinStopButton.interactable = true;
 
-            _statusText.text = "SPINNING (" + _existRerollCount + "/" + MaxRerollCount + ")";
             UpdateGaugeUI();
 
             if (_spinCts != null)
@@ -293,7 +297,6 @@ namespace Aftertime.MyTinyStreamer.Slots
             if (shieldCount == 3 || swordCount == 3 || magicCount == 3)
             {
                 _existRerollCount += 1;
-                if (_statusText != null) _statusText.text = "??? +1";
             }
 
             SlotEvaluateContainer resultContainer = new SlotEvaluateContainer(swordCount, shieldCount, magicCount);
@@ -309,7 +312,6 @@ namespace Aftertime.MyTinyStreamer.Slots
         private async UniTask ApplyStopEffectsAsync()
         {
             _spinButtonText.text = "SPIN";
-            _statusText.text = "정지";
             CacheCurrentSymbols();
             EvaluateSlotResults();
             UpdateGaugeUI();
