@@ -14,7 +14,8 @@ public class BattleUnit : MonoBehaviour
         }
     }
 
-    [SerializeField] private int _hp;
+    private int _hp;
+    [SerializeField] protected int _maxHP;
     [SerializeField] private TextMeshProUGUI _hpText;
     
     public int Shield
@@ -27,12 +28,15 @@ public class BattleUnit : MonoBehaviour
         }
     }
 
-    [SerializeField] private int _shield;
+    private int _shield;
+    [SerializeField] protected int _maxShield;
     [SerializeField] private TextMeshProUGUI _shieldText;
 
-    public void Init()
+    public virtual void Init()
     {
+        _hp = _maxHP;
         HP = _hp;
+        _shield = _maxShield;
         Shield = _shield;
     }
     
