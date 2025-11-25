@@ -44,6 +44,7 @@ namespace Aftertime.MyTinyStreamer.Tile
 
         private readonly List<Vector3Int> _forkCandidates = new List<Vector3Int>();
         private readonly List<Vector3Int> _graphCandidates = new List<Vector3Int>();
+        private readonly HashSet<Vector3Int> _visitedCells = new HashSet<Vector3Int>();
         private readonly Dictionary<Vector3Int, Tile> _tileLookup = new Dictionary<Vector3Int, Tile>();
         private readonly Dictionary<Tile, Color> _highlightedTiles = new Dictionary<Tile, Color>();
         private readonly Random _rng = new Random();
@@ -143,12 +144,14 @@ namespace Aftertime.MyTinyStreamer.Tile
             Vector3Int current = _gridMap.WorldToCell(Mover.position);
             current.z = 0;
 
+            _visitedCells.Clear();
+            _visitedCells.Add(current);
+
             try
             {
                 for (int i = 0; i < steps; i++)
                 {
                     token.ThrowIfCancellationRequested();
-
                     List<Vector3Int> candidates = GetMoveCandidates(current, _lastCell);
 
                     if (candidates.Count >= 2)
@@ -162,6 +165,7 @@ namespace Aftertime.MyTinyStreamer.Tile
                             _lastCell = current;
                             current = next;
                             RaiseArrivalEvents(current);
+                            _visitedCells.Add(current);
                             continue;
                         }
 
@@ -178,6 +182,7 @@ namespace Aftertime.MyTinyStreamer.Tile
                         _lastCell = current;
                         current = next;
                         RaiseArrivalEvents(current);
+                        _visitedCells.Add(current);
                         continue;
                     }
                     if (candidates.Count == 1)
@@ -187,6 +192,7 @@ namespace Aftertime.MyTinyStreamer.Tile
                         _lastCell = current;
                         current = next;
                         RaiseArrivalEvents(current);
+                        _visitedCells.Add(current);
                         continue;
                     }
 
@@ -200,6 +206,7 @@ namespace Aftertime.MyTinyStreamer.Tile
                             _lastCell = current;
                             current = next;
                             RaiseArrivalEvents(current);
+                            _visitedCells.Add(current);
                             continue;
                         }
                     }
@@ -231,12 +238,18 @@ namespace Aftertime.MyTinyStreamer.Tile
             for (int i = 0; i < _neighborDirs.Length; i++)
             {
                 Vector3Int neighbor = current + _neighborDirs[i];
+
+                if (last != null && (last.Value == new Vector3Int(-1,0,0) || last.Value == new Vector3Int(0,0,0)))
+                {
+                    Debug.Log("와드");
+                }
+
                 if (last.HasValue && neighbor == last.Value)
                 {
                     continue;
                 }
 
-                if (_gridMap.IsWalkable(neighbor))
+                if (_gridMap.IsWalkable(neighbor) && !_visitedCells.Contains(neighbor))
                 {
                     result.Add(neighbor);
                 }
@@ -260,14 +273,13 @@ namespace Aftertime.MyTinyStreamer.Tile
             }
         }
 
-        /// <summary>막혔??????로 물러????보까?? ??함??????구합??다.</summary>
         private List<Vector3Int> GetMoveCandidatesAllowBack(Vector3Int current, Vector3Int? last)
         {
             List<Vector3Int> result = new List<Vector3Int>();
             for (int i = 0; i < _neighborDirs.Length; i++)
             {
                 Vector3Int neighbor = current + _neighborDirs[i];
-                if (_gridMap.IsWalkable(neighbor))
+                if (_gridMap.IsWalkable(neighbor) && !_visitedCells.Contains(neighbor))
                 {
                     result.Add(neighbor);
                 }
@@ -317,7 +329,7 @@ namespace Aftertime.MyTinyStreamer.Tile
                     continue;
                 }
 
-                if (_gridMap != null && _gridMap.IsWalkable(cell) == false)
+                if ((_gridMap != null && _gridMap.IsWalkable(cell) == false) || _visitedCells.Contains(cell))
                 {
                     continue;
                 }
