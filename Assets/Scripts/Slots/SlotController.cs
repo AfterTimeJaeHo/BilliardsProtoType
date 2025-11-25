@@ -31,7 +31,6 @@ namespace Aftertime.MyTinyStreamer.Slots
         [SerializeField] private Button _spinStopButton;
         [SerializeField] private TextMeshProUGUI _spinButtonText;
         [SerializeField] private Button _pullButton;
-        [SerializeField] private TextMeshProUGUI _pullButtonText;
         [SerializeField] private TextMeshProUGUI _statusText;
         [SerializeField] private TextMeshProUGUI _rerollText;
 
@@ -63,7 +62,6 @@ namespace Aftertime.MyTinyStreamer.Slots
             RegisterUIEvents();
             _spinButtonText.text = "SPIN";
             // Pull 버튼이 존재하면: 당기기/정지 분리 구성
-            _pullButtonText.text = "PULL";
             _spinStopButton.interactable = false; // 시작 시 Stop 비활성화
             _pullButton.interactable = true;
             _spinButtonText.text = "STOP"; // Stop 전용 버튼 텍스트

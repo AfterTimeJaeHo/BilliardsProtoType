@@ -239,11 +239,6 @@ namespace Aftertime.MyTinyStreamer.Tile
             {
                 Vector3Int neighbor = current + _neighborDirs[i];
 
-                if (last != null && (last.Value == new Vector3Int(-1,0,0) || last.Value == new Vector3Int(0,0,0)))
-                {
-                    Debug.Log("와드");
-                }
-
                 if (last.HasValue && neighbor == last.Value)
                 {
                     continue;
