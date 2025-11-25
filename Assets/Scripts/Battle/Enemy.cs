@@ -21,6 +21,9 @@ namespace Waving.Battle
         [SerializeField] private Sprite _damageArmorSprite3;
         [SerializeField] private Sprite _damageArmorSprite4;
 
+        public readonly int AttackPower = 20;
+        public readonly int ShieldPower = 0;
+        
         private const float StandingChangeDuration = 0.2f;
         private Sequence _damagedSequence;
 

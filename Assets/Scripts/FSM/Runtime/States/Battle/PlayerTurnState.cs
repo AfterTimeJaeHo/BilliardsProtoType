@@ -11,7 +11,8 @@ namespace StateMachine.Runtime
 {
     public class PlayerTurnState : DIClass, IState
     {
-        public event Action onSlotEvaluated;
+        public event Action onSlotEvaluated = delegate { };
+        public event Action onEnemyDead = delegate { };
         
         public OnEnter onEnter { get; set; }
         public OnExecute onExecute { get; set; }
@@ -52,7 +53,16 @@ namespace StateMachine.Runtime
 
             IncreaseShield(shieldCount);
             await AttackEnemy(attackCount);
-            onSlotEvaluated.Invoke();
+
+            int enemyHP = _container.Enemy.HP;
+            if (enemyHP <= 0)
+            {
+                onEnemyDead.Invoke();   
+            }
+            else
+            {
+                onSlotEvaluated.Invoke();   
+            }
         }
 
         private async UniTask AttackEnemy(int attackCount)
@@ -67,7 +77,7 @@ namespace StateMachine.Runtime
             const float damageInterval = 0.1f;
             for (int i = 0; i < attackCount; i++)
             {
-                enemy.OnDamaged(damage);   
+                enemy.OnDamaged(damage);
                 await UniTask.WaitForSeconds(damageInterval);
             }
         }

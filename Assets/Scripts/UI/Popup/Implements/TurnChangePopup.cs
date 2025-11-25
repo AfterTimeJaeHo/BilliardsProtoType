@@ -36,7 +36,7 @@ namespace Waving.UI
         {
             CanvasGroup canvasGroup = _turnChangePopupView.CanvasGroup;
             canvasGroup.DOKill();
-            canvasGroup.alpha = 0;
+            canvasGroup.alpha = 0.001f;
             
             Sequence sequence = DOTween.Sequence();
             sequence.AppendInterval(Delay);

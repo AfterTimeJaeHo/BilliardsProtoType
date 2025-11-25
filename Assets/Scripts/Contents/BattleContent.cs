@@ -1,6 +1,7 @@
 using System;
 using Aftertime.SecretSome.Common;
 using Aftertime.SecretSome.Content;
+using Aftertime.SecretSome.UI.Popup;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using StateMachine.Runtime;
@@ -9,12 +10,14 @@ using UnityEngine.UI;
 using Waving.Battle;
 using Waving.Di;
 using Waving.Scene;
+using Waving.UI;
 
 namespace Waving.Content
 {
     public class BattleContent : DIClass,IContent
     {
         public ContentState State { get; }
+        public event Action<bool> onStop = delegate { };
 
         private static readonly Vector2 EnterCharacterStartPos = new Vector2(0, -300);
         private static readonly Vector2 EnterCharacterStartScale = new Vector2(0.8f, 0.8f);
@@ -53,10 +56,14 @@ namespace Waving.Content
             throw new System.NotImplementedException();
         }
 
-        public void StopContent()
+        public async void StopContent()
         {
             UpdateExecutor.onUpdate -= stateMachine.Execute;
             ResetView();
+            await SceneEntryManager.Instance.Remove(GameScene.SlotPrototype);
+            PopupManager.Instance.Hide<FadePopup>();
+            bool isClear = true;
+            onStop.Invoke(isClear);
         }
 
         public void ResumeContent()
@@ -120,7 +127,8 @@ namespace Waving.Content
     public enum BattleContentsState
     {
         PlayerTurn,
-        EnemyTurn
+        EnemyTurn,
+        HScene
     }
    
 }

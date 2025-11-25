@@ -83,7 +83,14 @@ namespace Waving.Scene
             await LoadSceneAdditive(sceneInfo);
             EnterSceneEntry(sceneInfo);
         }
-        
+
+        public async UniTask Remove(GameScene sceneType)
+        {
+            SceneInfo sceneInfo = _sceneTable.GetSceneInfo(sceneType);
+            ExitCurrentSceneEntry();
+            await UnloadScene(sceneInfo);
+        }
+
         private async UniTask LoadSceneAdditive(SceneInfo sceneInfo)
         {
             string sceneName = sceneInfo.sceneName;
