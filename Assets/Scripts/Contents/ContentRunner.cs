@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Waving.Content;
 using Waving.Scene;
+using Waving.Tile.Content;
 
 namespace Aftertime.SecretSome.Content
 {
@@ -51,9 +53,9 @@ namespace Aftertime.SecretSome.Content
                 DontDestroyOnLoad(this);    
             }
             _contents = CreateContents();
-            SceneEntryManager.Instance.Additive(GameScene.Map);
+            StartContent<MapContent>();
         }
-
+        
         private Dictionary<Type, IContent> CreateContents()
         {
             return ReflectionUtil.CreateAllInstances<IContent>();
@@ -82,15 +84,17 @@ namespace Aftertime.SecretSome.Content
             }
         }
 
+
         protected virtual void Start()
         {
-            Init();
+            RegisterEvents();
             onContentInit.Invoke();
         }
 
-        private void Init()
+        private void RegisterEvents()
         {
-
+            BattleContent battleContent = _contents[typeof(BattleContent)] as BattleContent;
+            battleContent.onStop += (_) => ResumeContent<MapContent>();
         }
     }
 

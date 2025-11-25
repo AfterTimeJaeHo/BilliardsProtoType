@@ -1,22 +1,31 @@
 using Aftertime.SecretSome.Content;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Waving.Battle;
 using Waving.Common;
 using Waving.Content;
+using Waving.Di;
+using Waving.Scene;
 
 namespace Waving.Tile.Content
 {
-    public class MapContent : IContent
+    public class MapContent : DIClass,IContent
     {
         public ContentState State { get; }
-        public void StartContent()
+        
+        [Inject] private MapContentContainer _container;
+        private GameObject _enemyInBattle;
+        
+        public async void StartContent()
         {
-            throw new System.NotImplementedException();
+            await SceneEntryManager.Instance.Additive(GameScene.Map);
+            DIContainerBase.TryInjectAll(this);
+            _container.DiceMoveController.onEnemyFaced += (_) => ContentRunner.PauseContent<MapContent>();
+            _container.DiceMoveController.onEnemyFaced += (enemy) => _enemyInBattle = enemy;
         }
 
         public void PauseContent()
         {
-            throw new System.NotImplementedException();
         }
 
         public UniTask StartContentAsync()
@@ -31,17 +40,12 @@ namespace Waving.Tile.Content
 
         public void StopContent()
         {
-            throw new System.NotImplementedException();
         }
 
         public void ResumeContent()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void ResolveDependency(DependencyContainer dependencyContainer)
-        {
-            throw new System.NotImplementedException();
+            if(_enemyInBattle != null)
+                GameObject.Destroy(_enemyInBattle);
         }
     }
    

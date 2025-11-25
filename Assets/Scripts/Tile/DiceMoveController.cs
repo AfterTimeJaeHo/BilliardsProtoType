@@ -40,7 +40,7 @@ namespace Aftertime.MyTinyStreamer.Tile
         [SerializeField] private UnityEvent _onMoveComplete = new UnityEvent();
         [SerializeField] private CellEvent _onArrivedCell = new CellEvent();
 
-        public event Action onEnemyFaced;
+        public event Action<GameObject> onEnemyFaced;
 
         private readonly List<Vector3Int> _forkCandidates = new List<Vector3Int>();
         private readonly List<Vector3Int> _graphCandidates = new List<Vector3Int>();
@@ -71,7 +71,7 @@ namespace Aftertime.MyTinyStreamer.Tile
             }
 
             UIInputAction.Instance.Global.LeftClick.performed += OnLeftClick;
-            onEnemyFaced += ContentRunner.StartContent<BattleContent>;
+            onEnemyFaced += (_) => ContentRunner.StartContent<BattleContent>();
         }
 
         private void OnDisable()
@@ -255,7 +255,8 @@ namespace Aftertime.MyTinyStreamer.Tile
             Tile tile = FindTile(cell);
             if (tile != null && tile.TileType == TileType.Enemy)
             {
-                onEnemyFaced?.Invoke();
+                GameObject enemy = tile.transform.GetChild(0).gameObject;
+                onEnemyFaced?.Invoke(enemy);
             }
         }
 
