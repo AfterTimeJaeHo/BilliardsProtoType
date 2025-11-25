@@ -1,8 +1,8 @@
 namespace Waving.Di
 {
-    public abstract class DIClass
+    public class DIClass
     {
-        protected DIClass()
+        public DIClass()
         {
             DIContainerBase.TryInjectAll(this);
         }

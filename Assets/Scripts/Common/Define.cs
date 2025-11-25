@@ -6,5 +6,6 @@ namespace Waving.MyTinyStreamer.Common
     {
         public const string TileLayerName = "Tile";
         public const string SceneTablePath = "SceneTable/SceneTable";
+        public const string DamageTextPath = "Prefabs/Text_Damage";
     }
 }

@@ -79,15 +79,6 @@ namespace Aftertime.MyTinyStreamer.Slots
                 else if (symbol == SlotSymbol.Magic) s = _magicSprite;
                 _symbolImage.sprite = s;
                 _symbolImage.preserveAspect = true;
-                if (s == null)
-                {
-                    // 스프라이트가 비어있으면 임시 색상으로 구분(폴백)
-                    Color c = Color.white;
-                    if (symbol == SlotSymbol.Shield) c = new Color(0.3f, 0.6f, 1f, 1f);
-                    else if (symbol == SlotSymbol.Sword) c = new Color(1f, 0.3f, 0.3f, 1f);
-                    else if (symbol == SlotSymbol.Magic) c = new Color(0.7f, 0.3f, 0.9f, 1f);
-                    _symbolImage.color = c;
-                }
             }
         }
 
@@ -106,19 +97,7 @@ namespace Aftertime.MyTinyStreamer.Slots
                 _symbolImage.color = col;
             }
         }
-
-        public bool isActive
-        {
-            get { return _isActive; }
-        }
-
-        // 외부에서 공통 심볼 스프라이트를 설정
-        public void ConfigureSprites(Sprite shield, Sprite sword, Sprite magic)
-        {
-            _shieldSprite = shield;
-            _swordSprite = sword;
-            _magicSprite = magic;
-        }
+        
 
         // 슬롯머신 회전 연출(상하 이동 후 심볼 교체)
         public async UniTask SpinStepAsync(SlotSymbol nextSymbol, float travel, float duration, CancellationToken token)
