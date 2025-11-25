@@ -738,9 +738,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Waving.Battle.Player
   _maxHP: 150
-  _hpText: {fileID: 0}
+  _hpImage: {fileID: 1519497175}
   _maxShield: 0
-  _shieldText: {fileID: 0}
+  _shieldImage: {fileID: 590601669}
 --- !u!1 &675145179
 GameObject:
   m_ObjectHideFlags: 0
@@ -2870,6 +2870,7 @@ GameObject:
   - component: {fileID: 8861887645319882769}
   - component: {fileID: 3244492275170157928}
   - component: {fileID: 8341954674250588110}
+  - component: {fileID: 9049563134173728502}
   m_Layer: 0
   m_Name: Cell2
   m_TagString: Untagged
@@ -3823,10 +3824,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38c13115948b2a4ba68288a056cbc92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Waving.Battle.Enemy
-  _maxHP: 50
-  _hpText: {fileID: 0}
+  _maxHP: 250
+  _hpImage: {fileID: 851570411}
   _maxShield: 0
-  _shieldText: {fileID: 0}
+  _shieldImage: {fileID: 0}
   _rectTransform: {fileID: 1618585320877507755}
   _image: {fileID: 2987689117094960934}
   _overlayImage: {fileID: 1023269832}
@@ -4229,6 +4230,7 @@ GameObject:
   - component: {fileID: 1222317904027263541}
   - component: {fileID: 4037746875969671996}
   - component: {fileID: 4174843468241120209}
+  - component: {fileID: 8977661294055822236}
   m_Layer: 0
   m_Name: Cell3
   m_TagString: Untagged
@@ -4581,6 +4583,7 @@ GameObject:
   - component: {fileID: 8616913321974538154}
   - component: {fileID: 6422792960141404179}
   - component: {fileID: 4456534730501579828}
+  - component: {fileID: 8616913321974538155}
   m_Layer: 0
   m_Name: Cell1
   m_TagString: Untagged
@@ -4618,6 +4621,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8616913321974538155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8606569299100942494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
 --- !u!222 &8758647755660455591
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4715,6 +4731,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8977661294055822236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6976615520785251918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
 --- !u!1 &8978586140008287714
 GameObject:
   m_ObjectHideFlags: 0
@@ -4742,6 +4771,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798527914878149960}
   m_CullTransparentMesh: 1
+--- !u!114 &9049563134173728502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798527914878149960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
 --- !u!222 &9117814334594097115
 CanvasRenderer:
   m_ObjectHideFlags: 0

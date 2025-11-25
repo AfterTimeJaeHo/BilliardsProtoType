@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleUnit : MonoBehaviour
 {
@@ -10,13 +11,13 @@ public class BattleUnit : MonoBehaviour
         protected set
         {
             _hp = value;
-            _hpText.text = "체력: " + value;
+            _hpImage.fillAmount = (float)_hp / _maxHP;
         }
     }
 
     private int _hp;
     [SerializeField] protected int _maxHP;
-    [SerializeField] private TextMeshProUGUI _hpText;
+    [SerializeField] private Image _hpImage;
     
     public int Shield
     {
@@ -24,13 +25,14 @@ public class BattleUnit : MonoBehaviour
         protected set
         {
             _shield = value;
-            _shieldText.text = "실드: " + value;
+            if (_shieldImage != null)
+            _shieldImage.fillAmount = (float)_shield / _maxShield;
         }
     }
 
     private int _shield;
     [SerializeField] protected int _maxShield;
-    [SerializeField] private TextMeshProUGUI _shieldText;
+    [SerializeField] private Image _shieldImage;
 
     public virtual void Init()
     {
