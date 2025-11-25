@@ -10,6 +10,7 @@ using Waving.Battle;
 using Waving.Di;
 using Waving.MyTinyStreamer.Common;
 using Waving.UI;
+using Object = UnityEngine.Object;
 
 namespace StateMachine.Runtime
 {
@@ -96,18 +97,18 @@ namespace StateMachine.Runtime
 
         private async UniTask PlaySkillDirecting()
         {
-            Image bg = _container.PlayerSkillBG;
-            Image character = _container.PlayerSkillCharacter;
+            RawImage bg = _container.PlayerSkillBG;
+            RawImage character = _container.PlayerSkillCharacter;
             bg.rectTransform.localScale = Vector3.zero;
             bg.DOFade(0, 0);
             character.rectTransform.anchoredPosition = new Vector2(-25, -93);
             character.DOFade(0, 0);
 
             Material defaultMat = bg.material;
-            bg.material = Resources.Load<Material>(Define.SkillBGMatPath);
-            character.material = Resources.Load<Material>(Define.SkillCharacterMatPath);
-            bg.material.mainTextureOffset = new Vector2(0, 0);
-            character.material.mainTextureOffset = new Vector2(0, 0);
+            Material skillBGMat = Resources.Load<Material>(Define.SkillBGMatPath);
+            Material skillCharacterMat = Resources.Load<Material>(Define.SkillCharacterMatPath);
+            bg.material = Object.Instantiate(skillBGMat);
+            character.material = Object.Instantiate(skillCharacterMat);
             
             Sequence sequence = DOTween.Sequence();
             sequence.Append(bg.rectTransform.DOScale(Vector3.one, 0.2f));

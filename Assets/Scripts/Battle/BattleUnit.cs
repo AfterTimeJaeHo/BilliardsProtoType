@@ -18,15 +18,17 @@ public class BattleUnit : MonoBehaviour
     private int _hp;
     [SerializeField] protected int _maxHP;
     [SerializeField] private Image _hpImage;
-    
+
     public int Shield
     {
         get => _shield;
         protected set
         {
             _shield = value;
-            if (_shieldImage != null)
-            _shieldImage.fillAmount = (float)_shield / _maxShield;
+            if (_shieldImage != null && _maxShield > 0)
+            {
+                _shieldImage.fillAmount = (float)_shield / _maxShield;
+            }
         }
     }
 
@@ -41,13 +43,34 @@ public class BattleUnit : MonoBehaviour
         _shield = _maxShield;
         Shield = _shield;
     }
-    
+
     public virtual void OnDamaged(int damage)
     {
-        if(Shield != 0)
+        if (Shield != 0)
+        {
+            int originDamage = damage;
             damage -= Shield;
-            
+            int shieldDamage = originDamage - damage;
+            DecreaseShield(shieldDamage);
+        }
+
         HP -= damage;
-        HP = Mathf.Clamp(HP,0, HP);
+        HP = Mathf.Clamp(HP, 0, HP);
+    }
+
+    public void IncreaseShield(int shieldValue)
+    {
+        if (_shield == 0)
+        {
+            _maxShield = 0;
+        }
+        _maxShield += shieldValue;
+        _shield += shieldValue;
+        Shield = _shield;
+    }
+
+    public void DecreaseShield(int shieldValue)
+    {
+        Shield -= shieldValue;
     }
 }

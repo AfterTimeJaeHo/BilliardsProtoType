@@ -15,11 +15,6 @@ namespace Waving.Battle
             base.OnDamaged(damage);
             DamageText.ShowDamage(damage);
         }
-        
-        public void IncreaseShield(int shieldValue)
-        {
-            Shield += shieldValue;
-        }
     }
    
 }

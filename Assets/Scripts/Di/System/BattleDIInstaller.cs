@@ -16,8 +16,8 @@ namespace Waving.Di
         [SerializeField] private Player _player;
         [SerializeField] private Enemy _enemy;
         [SerializeField] private SlotController _slotController;
-        [SerializeField] private Image _playerSkillBG;
-        [SerializeField] private Image _playerSkillCharacter;
+        [SerializeField] private RawImage _playerSkillBG;
+        [SerializeField] private RawImage _playerSkillCharacter;
         
         [SerializeField] private RectTransform _stageHolder;
         [SerializeField] private CanvasGroup _stageCanvasGroup;

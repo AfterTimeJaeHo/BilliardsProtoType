@@ -112,6 +112,13 @@ namespace Aftertime.MyTinyStreamer.Slots
                 if (_spinningActiveSlots == 0)
                 {
                     _isSpinning = false;
+                    TextMeshProUGUI stopButtonText = _spinStopButton.GetComponentInChildren<TextMeshProUGUI>();
+                    stopButtonText.text = "GO";
+                }
+                else
+                {
+                    TextMeshProUGUI stopButtonText = _spinStopButton.GetComponentInChildren<TextMeshProUGUI>();
+                    stopButtonText.text = "STOP";
                 }
 
                 return true;

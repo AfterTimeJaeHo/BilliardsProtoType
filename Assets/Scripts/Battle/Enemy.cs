@@ -95,9 +95,9 @@ namespace Waving.Battle
 
         private void UpdateBreakState()
         {
-            int armorBreakLevel2 = (_maxHP / 100) * 90;
-            int armorBreakLevel3 = (_maxHP / 100) * 60;
-            int armorBreakLevel4 = (_maxHP / 100) * 30;
+            int armorBreakLevel2 = _maxHP * 90 / 100; // 90%
+            int armorBreakLevel3 = _maxHP * 60 / 100; // 60%
+            int armorBreakLevel4 = _maxHP * 30 / 100; // 30%
 
             if (HP <= armorBreakLevel4)
             {
