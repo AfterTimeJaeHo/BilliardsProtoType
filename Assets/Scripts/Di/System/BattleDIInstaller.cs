@@ -16,6 +16,9 @@ namespace Waving.Di
         [SerializeField] private Player _player;
         [SerializeField] private Enemy _enemy;
         [SerializeField] private SlotController _slotController;
+        [SerializeField] private Image _playerSkillBG;
+        [SerializeField] private Image _playerSkillCharacter;
+        
         [SerializeField] private RectTransform _stageHolder;
         [SerializeField] private CanvasGroup _stageCanvasGroup;
         [SerializeField] private CanvasGroup _uiCanvasGroup;
@@ -24,7 +27,7 @@ namespace Waving.Di
 
         private void Awake()
         {
-            new PlayerTurnContainer(_player, _enemy, _slotController);
+            new PlayerTurnContainer(_player, _enemy, _slotController, _playerSkillBG, _playerSkillCharacter);
             new BattleContentContainer(_BattleEnterBG, _BattleEnterCharacter, _BattleEnterCanvasGroup,
                     _BattleMainCanvasGroup, _player, _enemy);
             new EnemyTurnContainer(_player,_enemy,_stageHolder);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -31,12 +32,13 @@ namespace Aftertime.MyTinyStreamer.Slots
         [SerializeField] private Button _spinStopButton;
         [SerializeField] private TextMeshProUGUI _spinButtonText;
         [SerializeField] private Button _pullButton;
+        [SerializeField] private RectTransform _leverImage;
         [SerializeField] private TextMeshProUGUI _statusText;
         [SerializeField] private TextMeshProUGUI _rerollText;
 
         [Header("Game")] [SerializeField] private int _totalSlotCount = 5;
-        [SerializeField] private int _existRerollCount = 5;
-        private const int MaxRerollCount = 5;
+        private int _existRerollCount = 3;
+        private const int MaxRerollCount = 3;
 
         private bool _isSpinning = false;
         private CancellationTokenSource _spinCts;
@@ -199,6 +201,12 @@ namespace Aftertime.MyTinyStreamer.Slots
             }
 
             if (_isSpinning) return;
+            Vector3 leverRot = new Vector3(0, 0, -20);
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(_leverImage.DORotate(leverRot, 0.1f));
+            sequence.AppendInterval(0.05f);
+            sequence.Append(_leverImage.DORotate(Vector3.zero, 0.1f));
+            sequence.onComplete += () => _pullButton.interactable = false;
             StartSpin().Forget();
         }
 
@@ -212,7 +220,6 @@ namespace Aftertime.MyTinyStreamer.Slots
             _isSpinning = true;
             _spinningActiveSlots = 0;
             _spinButtonText.text = "STOP";
-            _pullButton.interactable = false;
             _spinStopButton.interactable = true;
 
             UpdateGaugeUI();
@@ -303,7 +310,7 @@ namespace Aftertime.MyTinyStreamer.Slots
 
         private void UpdateGaugeUI()
         {
-            _rerollText.text = "Reroll: " + _existRerollCount.ToString();
+            _rerollText.text = "Reroll\n" + _existRerollCount.ToString();
         }
 
         // STOP 시 효과 적용 전체 플로우

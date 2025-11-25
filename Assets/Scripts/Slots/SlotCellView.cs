@@ -66,6 +66,9 @@ namespace Aftertime.MyTinyStreamer.Slots
         // 심볼 변경: 텍스트는 보조, 실제 표시는 스프라이트로 변경
         public void SetSymbol(SlotSymbol symbol)
         {
+            if (_swordSprite == null)
+                return;
+            
             _currentSymbol = symbol;
             if (_symbolText != null)
             {
@@ -88,10 +91,16 @@ namespace Aftertime.MyTinyStreamer.Slots
             _isActive = active;
             if (_background != null)
             {
+                if (_swordSprite == null)
+                    return;
+                
                 _background.color = active ? Color.white : new Color(0.36f, 0.36f, 0.36f, 1.0f);
             }
             if (_symbolImage != null)
             {
+                if (_swordSprite == null)
+                    return;
+                
                 Color col = _symbolImage.color;
                 col.a = active ? 1f : 0.5f;
                 _symbolImage.color = col;
@@ -113,11 +122,14 @@ namespace Aftertime.MyTinyStreamer.Slots
             float half = duration * 0.5f;
             try
             {
-                Tween down = rt.DOAnchorPosY(-travel, half).SetEase(Ease.InQuad);
-                await down.AsyncWaitForCompletion();
+                Tween dropOut = rt.DOAnchorPosY(-travel, half).SetEase(Ease.InQuad);
+                await dropOut.AsyncWaitForCompletion();
+
                 SetSymbol(nextSymbol);
-                Tween up = rt.DOAnchorPosY(0f, half).SetEase(Ease.OutQuad);
-                await up.AsyncWaitForCompletion();
+                rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, travel);
+
+                Tween dropIn = rt.DOAnchorPosY(0f, half).SetEase(Ease.OutQuad);
+                await dropIn.AsyncWaitForCompletion();
             }
             catch (System.Exception)
             {
