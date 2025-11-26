@@ -29,7 +29,7 @@ namespace Waving.Content
 
         public BattleContent()
         {
-            onEnterDirectingComplete += OnEnterDirectingComplete;
+            // onEnterDirectingComplete += OnEnterDirectingComplete;
         }
 
         public async void StartContent()
@@ -38,7 +38,21 @@ namespace Waving.Content
             DIContainerBase.TryInjectAll(this);
             ResetView();
             
-            ShowEnterDirecting();
+            stateMachine = new BattleStateMachine();
+            stateMachine.Init(null);
+            stateMachine.onAssaultExit += (isSuccess) =>
+            {
+                OnEnterDirectingComplete();
+                // 적 체력 분기
+                if (isSuccess)
+                {
+                    Enemy enemy = _container.Enemy;
+                    int damage = (enemy.HP * 10) / 100;
+                    enemy.OnDamaged(damage);
+                }
+            };
+            
+            // ShowEnterDirecting();
         }
 
         public void PauseContent()
@@ -94,13 +108,21 @@ namespace Waving.Content
             sequence.onComplete += () => onEnterDirectingComplete.Invoke();
         }
         
+        // private void OnEnterDirectingComplete()
+        // {
+        //     CanvasGroup mainCanvasGroup = _container.MainCanvasGroup;
+        //     mainCanvasGroup.interactable = true;
+        //     mainCanvasGroup.blocksRaycasts = true;
+        //     stateMachine = new BattleStateMachine();
+        //     stateMachine.Init(null);
+        //     UpdateExecutor.onUpdate += stateMachine.Execute;
+        // }
+        
         private void OnEnterDirectingComplete()
         {
             CanvasGroup mainCanvasGroup = _container.MainCanvasGroup;
             mainCanvasGroup.interactable = true;
             mainCanvasGroup.blocksRaycasts = true;
-            stateMachine = new BattleStateMachine();
-            stateMachine.Init(null);
             UpdateExecutor.onUpdate += stateMachine.Execute;
         }
 
@@ -126,6 +148,7 @@ namespace Waving.Content
     
     public enum BattleContentsState
     {
+        Assault,
         PlayerTurn,
         EnemyTurn,
         HScene

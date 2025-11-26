@@ -6,14 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/InGame.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
     path: Assets/Scenes/Map.unity
     guid: 077d5869954400a4993a4399c98cafc0
   - enabled: 1
     path: Assets/Scenes/SlotPrototype.unity
     guid: d207ffcd299ae1a4981260a27f4a3eae
-  - enabled: 1
-    path: Assets/Scenes/InGame.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

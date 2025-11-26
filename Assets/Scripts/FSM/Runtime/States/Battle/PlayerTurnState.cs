@@ -106,9 +106,8 @@ namespace StateMachine.Runtime
 
             Material defaultMat = bg.material;
             Material skillBGMat = Resources.Load<Material>(Define.SkillBGMatPath);
-            Material skillCharacterMat = Resources.Load<Material>(Define.SkillCharacterMatPath);
             bg.material = Object.Instantiate(skillBGMat);
-            character.material = Object.Instantiate(skillCharacterMat);
+            character.rectTransform.DOAnchorPosX(-80, 2.8f);
             
             Sequence sequence = DOTween.Sequence();
             sequence.Append(bg.rectTransform.DOScale(Vector3.one, 0.2f));
